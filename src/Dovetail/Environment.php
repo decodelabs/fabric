@@ -22,8 +22,8 @@ class Environment implements Config
     public static function getDefaultValues(): array
     {
         return [
-            'mode' => 'development',
-            'appNamespace' => null,
+            'mode' => "{{envString('ENV_MODE', 'production')}:development}",
+            'appNamespace' => '{{Songsprout\\Api::class}}',
             'appName' => 'Fabric',
             'localDataPath' => 'data/local',
             'sharedDataPath' => 'data/shared'

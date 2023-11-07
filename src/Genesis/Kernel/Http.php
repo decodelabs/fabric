@@ -26,6 +26,15 @@ class Http implements Kernel
     public const MIDDLEWARE = [
         // Error
         'ErrorHandler',
+
+        // Inbound
+        'Https',
+
+        // Outbound
+        'ContentSecurityPolicy',
+
+        // Generators
+        'Greenleaf'
     ];
 
     protected Dispatcher $dispatcher;

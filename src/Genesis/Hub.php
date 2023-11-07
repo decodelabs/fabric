@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace DecodeLabs\Fabric\Genesis;
 
 use DecodeLabs\Archetype;
+use DecodeLabs\Clip\Kernel as ClipKernel;
 use DecodeLabs\Coercion;
 use DecodeLabs\Dovetail;
 use DecodeLabs\Dovetail\Config as ConfigInterface;
@@ -263,7 +264,13 @@ class Hub implements HubInterface
      */
     public function loadKernel(): Kernel
     {
-        $class = Archetype::resolve(Kernel::class, $this->detectKernel());
+        $kernel = $this->detectKernel();
+
+        if ($kernel === 'Cli') {
+            $kernel = ['Cli', ClipKernel::class];
+        }
+
+        $class = Archetype::resolve(Kernel::class, $kernel);
         return new $class($this->context);
     }
 
@@ -272,13 +279,13 @@ class Hub implements HubInterface
         if (isset($_SERVER['HTTP_HOST'])) {
             return 'Http';
         } elseif (isset($_SERVER['argv'])) {
-            return 'Task';
+            return 'Cli';
         }
 
         switch (\PHP_SAPI) {
             case 'cli':
             case 'phpdbg':
-                return 'Task';
+                return 'Cli';
 
             case 'apache':
             case 'apache2filter':
