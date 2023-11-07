@@ -9,9 +9,11 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Fabric;
 
+use DecodeLabs\Fabric;
 use DecodeLabs\Fabric\Genesis\Hub;
 use DecodeLabs\Genesis;
 use DecodeLabs\Genesis\Bootstrap as Base;
+use DecodeLabs\Veneer;
 use Exception;
 
 require_once dirname(__DIR__, 2) . '/genesis/src/Bootstrap.php';
@@ -78,9 +80,15 @@ class Bootstrap extends Base
     }
 }
 
-
+// Init system
 $bootstrap = new Bootstrap();
 $bootstrap->run();
+
+// Veneer
+Veneer::register(
+    Context::class,
+    Fabric::class // @phpstan-ignore-line
+);
 
 // Run app
 $kernel = Genesis::initialize(Hub::class, [

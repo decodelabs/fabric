@@ -16,6 +16,7 @@ use DecodeLabs\Dovetail\Config as ConfigInterface;
 use DecodeLabs\Dovetail\Finder\Generic as DovetailFinder;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Fabric;
+use DecodeLabs\Fabric\App;
 use DecodeLabs\Fabric\Bootstrap;
 use DecodeLabs\Fabric\Dovetail as ConfigNamespace;
 use DecodeLabs\Fabric\Dovetail\Environment as EnvironmentConfig;
@@ -33,9 +34,14 @@ class Hub implements HubInterface
 {
     use CastTrait;
 
+    public const ARCHETYPES = [
+        Kernel::class => 'Genesis\\Kernel',
+    ];
+
     protected string $envId = 'default';
     protected string $appPath;
     protected bool $analysis = false;
+    protected App $app;
     protected Context $context;
 
     public function __construct(
@@ -123,7 +129,7 @@ class Hub implements HubInterface
         static $name;
 
         if (!isset($name)) {
-            $name = EnvironmentConfig::load()->getApplicationName();
+            $name = EnvironmentConfig::load()->getAppName();
         }
 
         return $name;
@@ -166,8 +172,9 @@ class Hub implements HubInterface
     /**
      * Setup loaders
      */
-    public function initializeLoaders(StackLoader $stack): void
-    {
+    public function initializeLoaders(
+        StackLoader $stack
+    ): void {
         // Dovetail
         if ($this->context->build->isCompiled()) {
             Dovetail::setEnvPath($this->context->build->path);
@@ -183,6 +190,21 @@ class Hub implements HubInterface
             ConfigInterface::class,
             ConfigNamespace::class // @phpstan-ignore-line
         );
+
+
+
+        // App
+        $namespace = EnvironmentConfig::load()->getAppNamespace();
+
+        if ($namespace !== null) {
+            Archetype::extend(App::class, $namespace);
+        }
+
+        $this->app = $this->context->container->getWith(App::class, [
+            'namespace' => $namespace
+        ]);
+
+        $this->app->initializeLoaders($stack);
     }
 
     /**
@@ -212,16 +234,28 @@ class Hub implements HubInterface
     public function initializePlatform(): void
     {
         // Setup Glitch
-        Glitch::setStartTime($this->context->getstartTime())
+        Glitch::setStartTime($this->context->getStartTime())
             ->setRunMode($this->context->environment->getMode())
             ->registerPathAliases([
                 'app' => $this->appPath,
-                'vendor' => $this->appPath . '/vendor',
-                'root' => $this->context->build->isCompiled() ?
-                    $this->context->build->path :
-                    dirname($this->context->build->path)
+                'vendor' => $this->appPath . '/vendor'
             ])
             ->registerAsErrorHandler();
+
+        $appNamespace = $this->app->getNamespace();
+
+        foreach (static::ARCHETYPES as $interface => $classExt) {
+            Archetype::extend(
+                $interface,
+                Fabric::class . '\\' . $classExt // @phpstan-ignore-line
+            );
+
+            if ($appNamespace !== null) {
+                Archetype::extend($interface, $appNamespace . '\\' . $classExt);
+            }
+        }
+
+        $this->app->initializePlatform();
     }
 
     /**
@@ -262,6 +296,9 @@ class Hub implements HubInterface
         );
     }
 
+    /**
+     * Get Build Manifest
+     */
     public function getBuildManifest(): ?BuildManifest
     {
         return null;

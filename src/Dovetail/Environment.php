@@ -22,22 +22,12 @@ class Environment implements Config
     public static function getDefaultValues(): array
     {
         return [
-            'applicationName' => 'Fabric',
             'mode' => 'development',
+            'appNamespace' => null,
+            'appName' => 'Fabric',
             'localDataPath' => 'data/local',
             'sharedDataPath' => 'data/shared'
         ];
-    }
-
-
-    /**
-     * Get application name
-     */
-    public function getApplicationName(): string
-    {
-        return $this->data->applicationName->as('string', [
-            'default' => 'Fabric'
-        ]);
     }
 
 
@@ -50,6 +40,32 @@ class Environment implements Config
             'default' => 'testing'
         ]);
     }
+
+    /**
+     * Get application name
+     */
+    public function getAppName(): string
+    {
+        return $this->data->appName->as('string', [
+            'default' => 'Fabric'
+        ]);
+    }
+
+    /**
+     * Get application namespace
+     */
+    public function getAppNamespace(): ?string
+    {
+        if (
+            null === ($output = $this->data->appNamespace->as('?string')) ||
+            $output === '\\'
+        ) {
+            return null;
+        }
+
+        return rtrim($output, '\\');
+    }
+
 
     /**
      * Get local data path
