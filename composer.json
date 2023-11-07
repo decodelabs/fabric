@@ -1,0 +1,35 @@
+{
+    "name": "decodelabs/fabric",
+    "description": "Lightweight PHP framework implementation using DecodeLabs ecosystem",
+    "type": "library",
+    "keywords": [ ],
+    "license": "MIT",
+    "authors": [ {
+            "name": "Tom Wright",
+            "email": "tom@inflatablecookie.com"
+        } ],
+    "require": {
+        "php": "^8.1",
+
+        "decodelabs/archetype": "^0.2.16",
+        "decodelabs/dovetail": "^0.1.4",
+        "decodelabs/exceptional": "^0.4.4",
+        "decodelabs/genesis": "^0.8.2",
+        "decodelabs/glitch": "^0.18.9",
+        "decodelabs/lucid": "^0.4.1",
+        "decodelabs/coercion": "^0.2.7"
+    },
+    "require-dev": {
+        "decodelabs/phpstan-decodelabs": "^0.6.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "DecodeLabs\\Fabric\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-develop": "0.1.x-dev"
+        }
+    }
+}
