@@ -30,6 +30,7 @@ use DecodeLabs\Genesis\Hub as HubInterface;
 use DecodeLabs\Genesis\Kernel;
 use DecodeLabs\Genesis\Loader\Stack as StackLoader;
 use DecodeLabs\Glitch;
+use DecodeLabs\Greenleaf;
 
 class Hub implements HubInterface
 {
@@ -255,6 +256,8 @@ class Hub implements HubInterface
                 Archetype::extend($interface, $appNamespace . '\\' . $classExt);
             }
         }
+
+        Greenleaf::$namespaces->add($appNamespace . '\\Greenleaf');
 
         $this->app->initializePlatform();
     }

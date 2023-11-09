@@ -11,7 +11,8 @@
     "require": {
         "php": "^8.1",
 
-        "decodelabs/archetype": "^0.2.17",
+        "decodelabs/archetype": "^0.2.21",
+        "decodelabs/clip": "^0.3.8",
         "decodelabs/coercion": "^0.2.7",
         "decodelabs/dovetail": "^0.2",
         "decodelabs/exceptional": "^0.4.4",
@@ -19,8 +20,8 @@
         "decodelabs/glitch": "^0.18.9",
         "decodelabs/harvest": "^0.2.2",
         "decodelabs/lucid": "^0.4.1",
-        "decodelabs/veneer": "^0.10.20",
-        "decodelabs/clip": "^0.3.8"
+        "decodelabs/veneer": "^0.10.22",
+        "decodelabs/greenleaf": "^0.1.0"
     },
     "require-dev": {
         "decodelabs/phpstan-decodelabs": "^0.6.7"
