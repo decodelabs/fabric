@@ -9,7 +9,9 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Fabric;
 
+use DecodeLabs\Fabric;
 use DecodeLabs\Genesis\Context as Genesis;
+use DecodeLabs\Veneer;
 use DecodeLabs\Veneer\LazyLoad;
 
 #[LazyLoad]
@@ -31,3 +33,9 @@ class Context
         return $this->genesis->container->get(App::class);
     }
 }
+
+// Veneer
+Veneer::register(
+    Context::class,
+    Fabric::class // @phpstan-ignore-line
+);

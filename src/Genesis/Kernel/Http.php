@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace DecodeLabs\Fabric\Genesis\Kernel;
 
 use Closure;
+use DecodeLabs\Fabric;
 use DecodeLabs\Genesis\Context;
 use DecodeLabs\Genesis\Kernel;
 use DecodeLabs\Harvest;
@@ -62,7 +63,7 @@ class Http implements Kernel
 
         // Middleware
         $this->dispatcher->add(
-            ...$this->getMiddlewareList()
+            ...$this->loadMiddleware()
         );
 
         $this->request = (new RequestFactory())->createServerRequest();
@@ -73,9 +74,9 @@ class Http implements Kernel
      *
      * @return array<string|class-string<PsrMiddleware>|PsrMiddleware|Closure(PsrRequest, PsrHandler):PsrResponse>
      */
-    protected function getMiddlewareList(): array
+    protected function loadMiddleware(): array
     {
-        return static::MIDDLEWARE;
+        return Fabric::getApp()->getHttpMiddleware() ?? static::MIDDLEWARE;
     }
 
     /**

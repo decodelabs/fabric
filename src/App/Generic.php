@@ -46,4 +46,13 @@ class Generic implements App
     public function initializePlatform(): void
     {
     }
+
+
+    /**
+     * Get middleware list
+     */
+    public function getHttpMiddleware(): ?array
+    {
+        return null;
+    }
 }

@@ -29,7 +29,10 @@
     "autoload": {
         "psr-4": {
             "DecodeLabs\\Fabric\\": "src/"
-        }
+        },
+        "files": [
+            "src/Context.php"
+        ]
     },
     "extra": {
         "branch-alias": {
