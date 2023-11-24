@@ -84,12 +84,6 @@ class Bootstrap extends Base
 $bootstrap = new Bootstrap();
 $bootstrap->run();
 
-// Veneer
-Veneer::register(
-    Context::class,
-    Fabric::class // @phpstan-ignore-line
-);
-
 // Run app
 $kernel = Genesis::initialize(Hub::class, [
     'appPath' => $bootstrap->getAppPath(),

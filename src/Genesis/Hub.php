@@ -31,6 +31,7 @@ use DecodeLabs\Genesis\Kernel;
 use DecodeLabs\Genesis\Loader\Stack as StackLoader;
 use DecodeLabs\Glitch;
 use DecodeLabs\Greenleaf;
+use Psr\Http\Server\MiddlewareInterface as HttpMiddleware;
 
 class Hub implements HubInterface
 {
@@ -38,6 +39,7 @@ class Hub implements HubInterface
 
     public const ARCHETYPES = [
         Kernel::class => 'Genesis\\Kernel',
+        HttpMiddleware::class => 'Harvest\\Middleware',
     ];
 
     protected string $envId = 'default';

@@ -22,9 +22,19 @@ interface App
         ?string $namespace
     );
 
+    /**
+     * Get app namespace
+     */
     public function getNamespace(): ?string;
 
+    /**
+     * Perform any loader initialization
+     */
     public function initializeLoaders(StackLoader $stack): void;
+
+    /**
+     * Perform any platform initialization
+     */
     public function initializePlatform(): void;
 
 
