@@ -1,4 +1,4 @@
-## v0.1.1 (2023-12-11)
+## v0.2.0 (2023-12-11)
 * Improved middleware handling
 * Improved default namespaces
 
