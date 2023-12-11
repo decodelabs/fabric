@@ -41,7 +41,7 @@ interface App
     /**
      * Get middleware list
      *
-     * @return array<string|class-string<PsrMiddleware>|PsrMiddleware|Closure(PsrRequest, PsrHandler):PsrResponse>
+     * @return array<int|string,array<mixed>|string|class-string<PsrMiddleware>|PsrMiddleware|Closure(PsrRequest, PsrHandler):PsrResponse>
      */
     public function getHttpMiddleware(): ?array;
 }

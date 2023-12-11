@@ -30,6 +30,7 @@ class Http implements Kernel
 
         // Inbound
         'Https',
+        'Cors',
 
         // Outbound
         'ContentSecurityPolicy',
@@ -72,11 +73,27 @@ class Http implements Kernel
     /**
      * Get middleware list
      *
-     * @return array<string|class-string<PsrMiddleware>|PsrMiddleware|Closure(PsrRequest, PsrHandler):PsrResponse>
+     * @return array<int|string,array<mixed>|string|class-string<PsrMiddleware>|PsrMiddleware|Closure(PsrRequest, PsrHandler):PsrResponse>
      */
     protected function loadMiddleware(): array
     {
-        return Fabric::getApp()->getHttpMiddleware() ?? static::MIDDLEWARE;
+        $output = [];
+        $i = 0;
+
+        foreach (Fabric::getApp()->getHttpMiddleware() ?? static::MIDDLEWARE as $key => $value) {
+            if (is_int($key)) {
+                if (is_string($value)) {
+                    $key = $value;
+                    $value = [];
+                } elseif (is_object($value)) {
+                    $key = 'm' . ++$i;
+                }
+            }
+
+            $output[$key] = $value;
+        }
+
+        return $output;
     }
 
     /**
