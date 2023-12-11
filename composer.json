@@ -8,6 +8,8 @@
             "name": "Tom Wright",
             "email": "tom@inflatablecookie.com"
         } ],
+    "repositories": {
+    },
     "require": {
         "php": "^8.1",
 
@@ -36,7 +38,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-develop": "0.1.x-dev"
+            "dev-develop": "0.2.x-dev"
         }
     }
 }

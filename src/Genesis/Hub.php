@@ -11,6 +11,7 @@ namespace DecodeLabs\Fabric\Genesis;
 
 use DecodeLabs\Archetype;
 use DecodeLabs\Clip\Kernel as ClipKernel;
+use DecodeLabs\Clip\Task as ClipTask;
 use DecodeLabs\Coercion;
 use DecodeLabs\Dovetail;
 use DecodeLabs\Dovetail\Config as ConfigInterface;
@@ -40,6 +41,7 @@ class Hub implements HubInterface
     public const ARCHETYPES = [
         Kernel::class => 'Genesis\\Kernel',
         HttpMiddleware::class => 'Harvest\\Middleware',
+        ClipTask::class => 'Cli'
     ];
 
     protected string $envId = 'default';
@@ -259,7 +261,7 @@ class Hub implements HubInterface
             }
         }
 
-        Greenleaf::$namespaces->add($appNamespace . '\\Greenleaf');
+        Greenleaf::$namespaces->add($appNamespace . '\\Http');
 
         $this->app->initializePlatform();
     }
