@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Fabric;
 
+use DecodeLabs\Clip\Controller as ClipController;
 use DecodeLabs\Fabric;
 use DecodeLabs\Genesis\Context as Genesis;
 use DecodeLabs\Veneer;
@@ -31,6 +32,14 @@ class Context
     public function getApp(): App
     {
         return $this->genesis->container->get(App::class);
+    }
+
+    /**
+     * Get task controller
+     */
+    public function getTaskController(): ClipController
+    {
+        return $this->genesis->container->get(ClipController::class);
     }
 }
 
