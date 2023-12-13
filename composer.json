@@ -20,10 +20,11 @@
         "decodelabs/exceptional": "^0.4.4",
         "decodelabs/genesis": "^0.8.3",
         "decodelabs/glitch": "^0.18.9",
+        "decodelabs/greenleaf": "^0.1.0",
         "decodelabs/harvest": "^0.2.10",
         "decodelabs/lucid": "^0.4.1",
-        "decodelabs/veneer": "^0.10.22",
-        "decodelabs/greenleaf": "^0.1.0"
+        "decodelabs/systemic": "^0.11.9",
+        "decodelabs/veneer": "^0.10.22"
     },
     "require-dev": {
         "decodelabs/phpstan-decodelabs": "^0.6.7"

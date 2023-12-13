@@ -65,8 +65,8 @@ class Bootstrap extends Base
             $runPath = $this->appPath . '/data/local/run';
 
             $paths = [
-                $runPath . '/active/Run.php' => $runPath . '/active/apex/vendor',
-                $runPath . '/active2/Run.php' => $runPath . '/active2/apex/vendor',
+                $runPath . '/active1/run.php' => $runPath . '/active1/vendor',
+                $runPath . '/active2/run.php' => $runPath . '/active2/vendor',
             ];
         } else {
             $paths = [];

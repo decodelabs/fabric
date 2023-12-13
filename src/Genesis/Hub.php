@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace DecodeLabs\Fabric\Genesis;
 
 use DecodeLabs\Archetype;
+use DecodeLabs\Clip as ClipNamespace;
+use DecodeLabs\Clip\Controller as ClipController;
 use DecodeLabs\Clip\Kernel as ClipKernel;
 use DecodeLabs\Clip\Task as ClipTask;
 use DecodeLabs\Coercion;
@@ -24,7 +26,6 @@ use DecodeLabs\Fabric\Dovetail as ConfigNamespace;
 use DecodeLabs\Fabric\Dovetail\Environment as EnvironmentConfig;
 use DecodeLabs\Fluidity\CastTrait;
 use DecodeLabs\Genesis\Build;
-use DecodeLabs\Genesis\Build\Manifest as BuildManifest;
 use DecodeLabs\Genesis\Context;
 use DecodeLabs\Genesis\Environment\Config as EnvConfig;
 use DecodeLabs\Genesis\Hub as HubInterface;
@@ -32,6 +33,8 @@ use DecodeLabs\Genesis\Kernel;
 use DecodeLabs\Genesis\Loader\Stack as StackLoader;
 use DecodeLabs\Glitch;
 use DecodeLabs\Greenleaf;
+use DecodeLabs\Terminus as Cli;
+use DecodeLabs\Veneer;
 use Psr\Http\Server\MiddlewareInterface as HttpMiddleware;
 
 class Hub implements HubInterface
@@ -248,6 +251,8 @@ class Hub implements HubInterface
             ])
             ->registerAsErrorHandler();
 
+
+        // Namespaces
         $appNamespace = $this->app->getNamespace();
 
         foreach (static::ARCHETYPES as $interface => $classExt) {
@@ -263,6 +268,19 @@ class Hub implements HubInterface
 
         Greenleaf::$namespaces->add($appNamespace . '\\Http');
 
+
+        // Clip
+        $this->context->container->bindShared(
+            ClipController::class
+        );
+
+        Veneer::register(
+            ClipController::class,
+            ClipNamespace::class // @phpstan-ignore-line
+        );
+
+
+        // App
         $this->app->initializePlatform();
     }
 
@@ -315,7 +333,6 @@ class Hub implements HubInterface
      */
     public function getBuildManifest(): ?BuildManifest
     {
-        return null;
-        //return new BuildManifest(Cli::getSession());
+        return new BuildManifest(Cli::getSession());
     }
 }
