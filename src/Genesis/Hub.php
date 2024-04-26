@@ -195,7 +195,7 @@ class Hub implements HubInterface
             Dovetail::setEnvPath($this->appPath);
         }
 
-        Archetype::extend(
+        Archetype::map(
             ConfigInterface::class,
             ConfigNamespace::class // @phpstan-ignore-line
         );
@@ -206,7 +206,7 @@ class Hub implements HubInterface
         $namespace = EnvironmentConfig::load()->getAppNamespace();
 
         if ($namespace !== null) {
-            Archetype::extend(App::class, $namespace);
+            Archetype::map(App::class, $namespace);
         }
 
         $this->app = $this->context->container->getWith(App::class, [
@@ -256,13 +256,13 @@ class Hub implements HubInterface
         $appNamespace = $this->app->getNamespace();
 
         foreach (static::ARCHETYPES as $interface => $classExt) {
-            Archetype::extend(
+            Archetype::map(
                 $interface,
                 Fabric::class . '\\' . $classExt // @phpstan-ignore-line
             );
 
             if ($appNamespace !== null) {
-                Archetype::extend($interface, $appNamespace . '\\' . $classExt);
+                Archetype::map($interface, $appNamespace . '\\' . $classExt);
             }
         }
 

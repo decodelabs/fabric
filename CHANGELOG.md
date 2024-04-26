@@ -1,3 +1,7 @@
+## v0.2.2 (2024-04-26)
+* Updated Archetype dependency
+* Updated dependency list
+
 ## v0.2.1 (2023-12-13)
 * Implemented app builds
 
