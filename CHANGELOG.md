@@ -1,3 +1,5 @@
+* Updated dependency list
+
 ## v0.2.1 (2023-12-13)
 * Implemented app builds
 
