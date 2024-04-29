@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace DecodeLabs\Fabric\Dovetail;
+namespace DecodeLabs\Fabric\Dovetail\Config;
 
 use DecodeLabs\Dovetail\Config;
 use DecodeLabs\Dovetail\ConfigTrait;

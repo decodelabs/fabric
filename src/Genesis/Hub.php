@@ -16,14 +16,12 @@ use DecodeLabs\Clip\Kernel as ClipKernel;
 use DecodeLabs\Clip\Task as ClipTask;
 use DecodeLabs\Coercion;
 use DecodeLabs\Dovetail;
-use DecodeLabs\Dovetail\Config as ConfigInterface;
 use DecodeLabs\Dovetail\Finder\Generic as DovetailFinder;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Fabric;
 use DecodeLabs\Fabric\App;
 use DecodeLabs\Fabric\Bootstrap;
-use DecodeLabs\Fabric\Dovetail as ConfigNamespace;
-use DecodeLabs\Fabric\Dovetail\Environment as EnvironmentConfig;
+use DecodeLabs\Fabric\Dovetail\Config\Environment as EnvironmentConfig;
 use DecodeLabs\Fluidity\CastTrait;
 use DecodeLabs\Genesis\Build;
 use DecodeLabs\Genesis\Context;
@@ -35,16 +33,14 @@ use DecodeLabs\Glitch;
 use DecodeLabs\Greenleaf;
 use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Veneer;
-use Psr\Http\Server\MiddlewareInterface as HttpMiddleware;
 
 class Hub implements HubInterface
 {
     use CastTrait;
 
-    public const ARCHETYPES = [
-        Kernel::class => 'Genesis\\Kernel',
-        HttpMiddleware::class => 'Harvest\\Middleware',
-        ClipTask::class => 'Cli'
+    public const ARCHETYPE_ALIASES = [
+        ClipTask::class => 'Cli',
+        Greenleaf::class . '\\*' => 'Http'
     ];
 
     protected string $envId = 'default';
@@ -195,18 +191,21 @@ class Hub implements HubInterface
             Dovetail::setEnvPath($this->appPath);
         }
 
-        Archetype::map(
-            ConfigInterface::class,
-            ConfigNamespace::class // @phpstan-ignore-line
-        );
 
+        // Archetype
+        Archetype::map(
+            'DecodeLabs',
+            Fabric::class,
+            1
+        );
 
 
         // App
         $namespace = EnvironmentConfig::load()->getAppNamespace();
 
         if ($namespace !== null) {
-            Archetype::map(App::class, $namespace);
+            Archetype::map('DecodeLabs', $namespace, 10);
+            Archetype::alias('DecodeLabs\\Fabric', $namespace, 11);
         }
 
         $this->app = $this->context->container->getWith(App::class, [
@@ -253,21 +252,12 @@ class Hub implements HubInterface
 
 
         // Namespaces
-        $appNamespace = $this->app->getNamespace();
-
-        foreach (static::ARCHETYPES as $interface => $classExt) {
-            Archetype::map(
+        foreach (static::ARCHETYPE_ALIASES as $interface => $classExt) {
+            Archetype::alias(
                 $interface,
                 Fabric::class . '\\' . $classExt // @phpstan-ignore-line
             );
-
-            if ($appNamespace !== null) {
-                Archetype::map($interface, $appNamespace . '\\' . $classExt);
-            }
         }
-
-        Greenleaf::$namespaces->add($appNamespace . '\\Http');
-
 
         // Clip
         $this->context->container->bindShared(
