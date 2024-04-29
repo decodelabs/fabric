@@ -1,3 +1,4 @@
+## v0.2.4 (2024-04-29)
 * Simplified Archetype initiation
 * Fixed Veneer stubs in gitattributes
 
