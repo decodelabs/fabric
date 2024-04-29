@@ -206,6 +206,7 @@ class Hub implements HubInterface
         if ($namespace !== null) {
             Archetype::map('DecodeLabs', $namespace, 10);
             Archetype::alias('DecodeLabs\\Fabric', $namespace, 11);
+            Archetype::alias(App::class, $namespace);
         }
 
         $this->app = $this->context->container->getWith(App::class, [
