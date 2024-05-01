@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace DecodeLabs\Fabric\Cli;
+namespace DecodeLabs\Fabric\Cli\Deploy;
 
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Genesis;

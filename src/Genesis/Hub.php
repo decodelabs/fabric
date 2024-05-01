@@ -24,6 +24,7 @@ use DecodeLabs\Fabric\Bootstrap;
 use DecodeLabs\Fabric\Dovetail\Config\Environment as EnvironmentConfig;
 use DecodeLabs\Fluidity\CastTrait;
 use DecodeLabs\Genesis\Build;
+use DecodeLabs\Genesis\Build\Manifest as BuildManifestInterface;
 use DecodeLabs\Genesis\Context;
 use DecodeLabs\Genesis\Environment\Config as EnvConfig;
 use DecodeLabs\Genesis\Hub as HubInterface;
@@ -43,7 +44,7 @@ class Hub implements HubInterface
         Greenleaf::class . '\\*' => 'Http'
     ];
 
-    protected string $envId = 'default';
+    protected ?string $envId = null;
     protected string $appPath;
     protected bool $analysis = false;
     protected App $app;
@@ -56,20 +57,21 @@ class Hub implements HubInterface
         $this->context = $context;
 
         if ($options['analysis'] ?? false) {
-            $this->prepareForAnalysis();
+            $this->prepareForAnalysis($options);
             return;
         }
 
-        $this->appPath =
-            Coercion::toStringOrNull($options['appPath']) ??
-            Bootstrap::getDefaultAppPath();
+        $this->prepareForRun($options);
     }
 
-
-    private function prepareForAnalysis(): void
-    {
+    /**
+     * @param array<string, mixed> $options
+     */
+    protected function prepareForAnalysis(
+        array $options
+    ): void {
         $this->analysis = true;
-        $this->envId = 'analysis';
+        $this->envId = Coercion::toStringOrNull($options['envId'], true) ?? 'analysis';
 
         if (!$appDir = getcwd()) {
             throw Exceptional::Runtime('Unable to get current working directory');
@@ -82,6 +84,17 @@ class Hub implements HubInterface
         }
 
         $this->appPath = $appDir;
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    protected function prepareForRun(
+        array $options
+    ): void {
+        $this->appPath =
+            Coercion::toStringOrNull($options['appPath']) ??
+            Bootstrap::getDefaultAppPath();
     }
 
     /**
@@ -205,7 +218,7 @@ class Hub implements HubInterface
 
         if ($namespace !== null) {
             Archetype::map('DecodeLabs', $namespace, 10);
-            Archetype::alias('DecodeLabs\\Fabric', $namespace, 11);
+            Archetype::alias(Fabric::class, $namespace, 11);
             Archetype::alias(App::class, $namespace);
         }
 
@@ -276,7 +289,7 @@ class Hub implements HubInterface
     }
 
     /**
-     * Load custom R7 kernel
+     * Load kernel
      */
     public function loadKernel(): Kernel
     {
@@ -322,7 +335,7 @@ class Hub implements HubInterface
     /**
      * Get Build Manifest
      */
-    public function getBuildManifest(): ?BuildManifest
+    public function getBuildManifest(): ?BuildManifestInterface
     {
         return new BuildManifest(Cli::getSession());
     }
