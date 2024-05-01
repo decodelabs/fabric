@@ -77,7 +77,7 @@ class Hub implements HubInterface
             throw Exceptional::Runtime('Unable to get current working directory');
         }
 
-        $hasAppFile = file_exists($appDir . '/App.php');
+        $hasAppFile = file_exists($appDir . '/src/App.php');
 
         if (!$hasAppFile) {
             $appDir = dirname(dirname(__DIR__)) . '/tests';

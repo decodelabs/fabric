@@ -1,3 +1,6 @@
+## v0.3.2 (2024-05-01)
+* Fixed App class lookup location
+
 ## v0.3.1 (2024-05-01)
 * Fixed analysis envId option
 
