@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace DecodeLabs\Fabric\Cli;
+namespace DecodeLabs\Fabric\Cli\Deploy;
 
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Fabric;
@@ -65,6 +65,6 @@ class Update implements Task
     {
         Cli::info('Building...');
 
-        Fabric::getTaskController()->runTask('build');
+        Fabric::getTaskController()->runTask('deploy/build');
     }
 }

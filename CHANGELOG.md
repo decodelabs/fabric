@@ -1,3 +1,6 @@
+* Improved Hub extensibility
+* Moved Build and Update Cli tasks to Deploy namespace
+
 ## v0.2.5 (2024-04-29)
 * Fixed App class loader
 
