@@ -1,3 +1,6 @@
+## v0.3.1 (2024-05-01)
+* Fixed analysis envId option
+
 ## v0.3.0 (2024-05-01)
 * Improved Hub extensibility
 * Moved Build and Update Cli tasks to Deploy namespace
