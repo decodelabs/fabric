@@ -71,7 +71,7 @@ class Hub implements HubInterface
         array $options
     ): void {
         $this->analysis = true;
-        $this->envId = Coercion::toStringOrNull($options['envId'], true) ?? 'analysis';
+        $this->envId = Coercion::toStringOrNull($options['envId'] ?? null, true) ?? 'analysis';
 
         if (!$appDir = getcwd()) {
             throw Exceptional::Runtime('Unable to get current working directory');
