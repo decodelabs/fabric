@@ -23,7 +23,7 @@ class Environment implements Config
     {
         return [
             'mode' => "{{envString('ENV_MODE', 'production')}:development}",
-            'appNamespace' => '{{Songsprout\\Api::class}}',
+            'appNamespace' => '{{Vendor\\AppName::class}}',
             'appName' => 'Fabric',
             'localDataPath' => 'data/local',
             'sharedDataPath' => 'data/shared'
