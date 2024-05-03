@@ -18,10 +18,6 @@ use Psr\Http\Server\RequestHandlerInterface as PsrHandler;
 
 interface App
 {
-    public function __construct(
-        ?string $namespace
-    );
-
     /**
      * Get app namespace
      */
