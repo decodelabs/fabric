@@ -1,4 +1,5 @@
 * Updated default app namespace in config
+* Removed __construct from App interface
 
 ## v0.3.2 (2024-05-01)
 * Fixed App class lookup location
