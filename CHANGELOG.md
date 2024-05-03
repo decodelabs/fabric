@@ -1,3 +1,4 @@
+## v0.3.3 (2024-05-03)
 * Updated default app namespace in config
 * Removed __construct from App interface
 
