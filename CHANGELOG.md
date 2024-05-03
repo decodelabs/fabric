@@ -1,3 +1,6 @@
+## v0.3.4 (2024-05-03)
+* Improved tracking of analysis mode
+
 ## v0.3.3 (2024-05-03)
 * Updated default app namespace in config
 * Removed __construct from App interface

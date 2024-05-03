@@ -46,7 +46,7 @@ class Hub implements HubInterface
 
     protected ?string $envId = null;
     protected string $appPath;
-    protected bool $analysis = false;
+    protected ?AnalysisMode $analysisMode = null;
     protected App $app;
     protected Context $context;
 
@@ -70,7 +70,6 @@ class Hub implements HubInterface
     protected function prepareForAnalysis(
         array $options
     ): void {
-        $this->analysis = true;
         $this->envId = Coercion::toStringOrNull($options['envId'] ?? null, true) ?? 'analysis';
 
         if (!$appDir = getcwd()) {
@@ -79,7 +78,10 @@ class Hub implements HubInterface
 
         $hasAppFile = file_exists($appDir . '/src/App.php');
 
-        if (!$hasAppFile) {
+        if ($hasAppFile) {
+            $this->analysisMode = AnalysisMode::App;
+        } else {
+            $this->analysisMode = AnalysisMode::Self;
             $appDir = dirname(dirname(__DIR__)) . '/tests';
         }
 
@@ -173,7 +175,7 @@ class Hub implements HubInterface
             is_dir((string)Fabric\BUILD_ROOT_PATH)
         ) {
             $buildPath = Fabric\BUILD_ROOT_PATH;
-        } elseif ($this->analysis) {
+        } elseif ($this->analysisMode) {
             $buildPath = dirname(dirname(__DIR__));
         } else {
             $buildPath = $this->appPath . '/vendor/decodelabs/fabric';
@@ -234,7 +236,7 @@ class Hub implements HubInterface
      */
     public function loadEnvironmentConfig(): EnvConfig
     {
-        if ($this->analysis) {
+        if ($this->analysisMode) {
             return new EnvConfig\Development($this->envId);
         }
 
