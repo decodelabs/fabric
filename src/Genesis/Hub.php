@@ -91,9 +91,7 @@ class Hub implements HubInterface
     protected function prepareForRun(
         array $options
     ): void {
-        $this->appPath =
-            Coercion::toStringOrNull($options['appPath']) ??
-            Bootstrap::getDefaultAppPath();
+        $this->appPath = rtrim(Coercion::toString($options['appPath']), '/');
     }
 
     /**
