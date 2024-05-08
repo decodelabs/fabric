@@ -1,3 +1,6 @@
+* Added ensureCliSource helper
+* Added environement name option to config
+
 ## v0.3.5 (2024-05-08)
 * Simplified Bootstrap
 

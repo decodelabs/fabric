@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace DecodeLabs\Fabric\Cli\Deploy;
 
 use DecodeLabs\Clip\Task;
+use DecodeLabs\Fabric;
 use DecodeLabs\Genesis;
 use DecodeLabs\Terminus as Cli;
 
@@ -17,6 +18,8 @@ class Build implements Task
 {
     public function execute(): bool
     {
+        Fabric::ensureCliSource();
+
         // Prepare arguments
         Cli::$command
             ->addArgument('-force|f', 'Force compilation')

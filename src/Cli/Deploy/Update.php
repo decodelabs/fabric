@@ -19,6 +19,8 @@ class Update implements Task
 {
     public function execute(): bool
     {
+        Fabric::ensureCliSource();
+
         $this->updateGit();
         $this->updateComposer();
         $this->build();
