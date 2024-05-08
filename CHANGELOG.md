@@ -1,3 +1,5 @@
+* Added vendorPath control in Bootstrap
+
 ## v0.3.6 (2024-05-08)
 * Added ensureCliSource helper
 * Added environement name option to config

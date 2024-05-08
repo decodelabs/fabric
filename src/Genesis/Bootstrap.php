@@ -24,15 +24,22 @@ class Bootstrap extends Base
     protected string $hubClass = Hub::class;
     protected string $appPath;
 
+    protected string $vendorPath = 'vendor';
+    protected string $buildVendorPath;
+
     /**
      * Init with root path of source Df.php and app path
      */
     public function __construct(
         ?string $hubClass = null,
-        ?string $appPath = null
+        ?string $appPath = null,
+        ?string $vendorPath = null,
+        ?string $buildVendorPath = null
     ) {
         $this->hubClass = $hubClass ?? $this->hubClass;
         $this->appPath = $appPath ?? $this->getDefaultAppPath();
+        $this->vendorPath = $vendorPath ?? $this->vendorPath;
+        $this->buildVendorPath = $buildVendorPath ?? $this->vendorPath;
     }
 
     /**
@@ -54,17 +61,17 @@ class Bootstrap extends Base
     /**
      * Get default app path
      */
-    public static function getDefaultAppPath(): string
+    public function getDefaultAppPath(): string
     {
         $entryPath = $_SERVER['SCRIPT_FILENAME'];
 
-        if (!str_contains($entryPath, '/vendor/')) {
+        if (!str_contains($entryPath, '/' . $this->vendorPath . '/')) {
             throw new Exception(
                 'Unable to determine entry point'
             );
         }
 
-        return explode('/vendor/', $entryPath, 2)[0] . '/';
+        return explode('/' . $this->vendorPath . '/', $entryPath, 2)[0] . '/';
     }
 
     /**
@@ -87,14 +94,14 @@ class Bootstrap extends Base
             $runPath = $this->appPath . '/data/local/run';
 
             $paths = [
-                $runPath . '/active1/run.php' => $runPath . '/active1/vendor',
-                $runPath . '/active2/run.php' => $runPath . '/active2/vendor',
+                $runPath . '/active1/run.php' => $runPath . '/active1/' . $this->buildVendorPath,
+                $runPath . '/active2/run.php' => $runPath . '/active2/' . $this->buildVendorPath,
             ];
         } else {
             $paths = [];
         }
 
-        $paths[__FILE__] = $this->appPath . '/vendor';
+        $paths[__FILE__] = $this->appPath . '/' . $this->vendorPath;
 
         return $paths;
     }
