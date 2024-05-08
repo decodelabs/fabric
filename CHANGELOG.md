@@ -1,3 +1,4 @@
+## v0.3.7 (2024-05-08)
 * Added vendorPath control in Bootstrap
 
 ## v0.3.6 (2024-05-08)
