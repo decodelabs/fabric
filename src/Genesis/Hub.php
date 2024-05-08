@@ -20,7 +20,6 @@ use DecodeLabs\Dovetail\Finder\Generic as DovetailFinder;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Fabric;
 use DecodeLabs\Fabric\App;
-use DecodeLabs\Fabric\Bootstrap;
 use DecodeLabs\Fabric\Dovetail\Config\Environment as EnvironmentConfig;
 use DecodeLabs\Fluidity\CastTrait;
 use DecodeLabs\Genesis\Build;
