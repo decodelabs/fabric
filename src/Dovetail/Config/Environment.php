@@ -23,6 +23,7 @@ class Environment implements Config
     {
         return [
             'mode' => "{{envString('ENV_MODE', 'production')}:development}",
+            'name' => "{{envString('ENV_NAME')}",
             'appNamespace' => '{{Vendor\\AppName::class}}',
             'appName' => 'Fabric',
             'localDataPath' => 'data/local',
@@ -39,6 +40,14 @@ class Environment implements Config
         return $this->data->mode->as('string', [
             'default' => 'testing'
         ]);
+    }
+
+    /**
+     * Get environment name
+     */
+    public function getName(): ?string
+    {
+        return $this->data->name->as('?string');
     }
 
     /**

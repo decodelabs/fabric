@@ -69,8 +69,6 @@ class Hub implements HubInterface
     protected function prepareForAnalysis(
         array $options
     ): void {
-        $this->envId = Coercion::toStringOrNull($options['envId'] ?? null, true) ?? 'analysis';
-
         if (!$appDir = getcwd()) {
             throw Exceptional::Runtime('Unable to get current working directory');
         }
@@ -236,7 +234,7 @@ class Hub implements HubInterface
     public function loadEnvironmentConfig(): EnvConfig
     {
         if ($this->analysisMode) {
-            return new EnvConfig\Development($this->envId);
+            return new EnvConfig\Development('analysis');
         }
 
         /** @phpstan-ignore-next-line */
@@ -244,7 +242,7 @@ class Hub implements HubInterface
 
         /** @var class-string<EnvConfig\Development|EnvConfig\Testing|EnvConfig\Production> */
         $class = EnvConfig::class . '\\' . $name;
-        $output = new $class($this->envId);
+        $output = new $class($this->envId ?? EnvironmentConfig::load()->getName());
 
         $output->setUmask(0);
 

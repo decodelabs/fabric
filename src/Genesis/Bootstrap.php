@@ -18,9 +18,7 @@ require_once dirname(__DIR__, 3) . '/genesis/src/Bootstrap.php';
 class Bootstrap extends Base
 {
     public const SOURCE_ARGUMENTS = [
-        '--fabric-source',
-        'deploy/build',
-        'deploy/update'
+        '--fabric-source'
     ];
 
     protected string $hubClass = Hub::class;

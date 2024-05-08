@@ -26,4 +26,5 @@ class Fabric implements Proxy
     public static function getTaskController(): Ref1 {
         return static::$instance->getTaskController();
     }
+    public static function ensureCliSource(): void {}
 };
