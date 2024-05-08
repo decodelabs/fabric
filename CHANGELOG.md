@@ -1,3 +1,6 @@
+## v0.3.5 (2024-05-08)
+* Simplified Bootstrap
+
 ## v0.3.4 (2024-05-03)
 * Improved tracking of analysis mode
 
