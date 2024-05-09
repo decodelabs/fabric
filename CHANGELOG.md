@@ -1,3 +1,7 @@
+## v0.3.8 (2024-05-09)
+* Added exit to ensureCliSource
+* Added --fabric-source flag to update task
+
 ## v0.3.7 (2024-05-08)
 * Added vendorPath control in Bootstrap
 

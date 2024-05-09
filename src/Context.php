@@ -62,6 +62,7 @@ class Context
 
         Systemic::runScript([$path, ...$args]);
         $this->genesis->shutdown();
+        exit;
     }
 }
 
