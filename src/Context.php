@@ -57,10 +57,9 @@ class Context
         Cli::newLine();
 
         $args = $_SERVER['argv'] ?? [];
-        $path = realpath(array_shift($args));
         $args[] = '--fabric-source';
 
-        Systemic::runScript([$path, ...$args]);
+        Systemic::runScript($args);
         $this->genesis->shutdown();
         exit;
     }
