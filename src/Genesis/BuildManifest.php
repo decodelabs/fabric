@@ -157,12 +157,7 @@ class BuildManifest implements Manifest
      */
     public function scanPostCompileTasks(): Generator
     {
-        yield new GenericTask(
-            'Purging caches',
-            function () {
-                Fabric::getTaskController()->runTask('cache/purge');
-            }
-        );
+        yield from [];
     }
 
     /**
@@ -170,6 +165,11 @@ class BuildManifest implements Manifest
      */
     public function scanPostActivationTasks(): Generator
     {
-        yield from [];
+        yield new GenericTask(
+            'Purging caches',
+            function () {
+                Fabric::getTaskController()->runTask('cache/purge');
+            }
+        );
     }
 }

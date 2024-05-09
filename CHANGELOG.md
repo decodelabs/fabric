@@ -1,3 +1,5 @@
+* Moved cache purge task to post activation
+
 ## v0.3.9 (2024-05-09)
 * Added Cache Purge task to BuildManifest
 * Fixed realpath in ensureCliSource
