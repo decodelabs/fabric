@@ -1,3 +1,4 @@
+## v0.3.8 (2024-05-09)
 * Added exit to ensureCliSource
 * Added --fabric-source flag to update task
 
