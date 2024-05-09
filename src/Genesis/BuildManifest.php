@@ -13,9 +13,11 @@ use DecodeLabs\Atlas;
 use DecodeLabs\Atlas\Dir;
 use DecodeLabs\Atlas\File;
 use DecodeLabs\Exceptional;
+use DecodeLabs\Fabric;
 use DecodeLabs\Genesis;
 use DecodeLabs\Genesis\Build\Manifest;
 use DecodeLabs\Genesis\Build\Package;
+use DecodeLabs\Genesis\Build\Task\Generic as GenericTask;
 use DecodeLabs\Terminus\Session;
 use Generator;
 
@@ -155,7 +157,12 @@ class BuildManifest implements Manifest
      */
     public function scanPostCompileTasks(): Generator
     {
-        yield from [];
+        yield new GenericTask(
+            'Purging caches',
+            function () {
+                Fabric::getTaskController()->runTask('cache/purge');
+            }
+        );
     }
 
     /**
