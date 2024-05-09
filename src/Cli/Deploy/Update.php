@@ -67,6 +67,8 @@ class Update implements Task
     {
         Cli::info('Building...');
 
-        Fabric::getTaskController()->runTask('deploy/build');
+        Fabric::getTaskController()->runTask('deploy/build', [
+            '--fabric-source'
+        ]);
     }
 }
