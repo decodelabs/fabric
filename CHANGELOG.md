@@ -1,3 +1,5 @@
+* Removed unneeded LazyLoad binding attribute
+
 ## v0.3.10 (2024-07-17)
 * Moved cache purge task to post activation
 * Updated Veneer dependency
