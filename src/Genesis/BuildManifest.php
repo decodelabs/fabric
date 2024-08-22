@@ -148,7 +148,7 @@ class BuildManifest implements Manifest
             'const BUILD_TIMESTAMP = ' . time() . ';' . "\n" .
             'const BUILD_ID = \'' . $this->buildId . '\';' . "\n" .
             'const BUILD_ROOT_PATH = __DIR__;' . "\n" .
-            'const BUILD_ENV_MODE = \'' . Genesis::$environment->getMode() . '\';'
+            'const BUILD_ENV_MODE = \'' . Genesis::$environment->getMode()->value . '\';'
         );
     }
 

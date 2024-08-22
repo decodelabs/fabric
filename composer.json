@@ -18,13 +18,13 @@
         "decodelabs/coercion": "^0.2.7",
         "decodelabs/dovetail": "^0.2",
         "decodelabs/exceptional": "^0.4.4",
-        "decodelabs/genesis": "^0.8.3",
+        "decodelabs/genesis": "^0.9",
         "decodelabs/glitch": "^0.18.9",
-        "decodelabs/greenleaf": "^0.2.0",
-        "decodelabs/harvest": "^0.2.10",
-        "decodelabs/lucid": "^0.4.1",
+        "decodelabs/greenleaf": "^0.3",
+        "decodelabs/harvest": "^0.3",
+        "decodelabs/lucid": "^0.4.7",
         "decodelabs/systemic": "^0.11.9",
-        "decodelabs/veneer": "^0.11.1"
+        "decodelabs/veneer": "^0.11.6"
     },
     "require-dev": {
         "decodelabs/phpstan-decodelabs": "^0.6.7",

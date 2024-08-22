@@ -38,7 +38,7 @@ class Hub implements HubInterface
 {
     use CastTrait;
 
-    public const ARCHETYPE_ALIASES = [
+    protected const ArchetypeAliases = [
         ClipTask::class => 'Cli',
         Greenleaf::class . '\\*' => 'Http'
     ];
@@ -254,7 +254,7 @@ class Hub implements HubInterface
     {
         // Setup Glitch
         Glitch::setStartTime($this->context->getStartTime())
-            ->setRunMode($this->context->environment->getMode())
+            ->setRunMode($this->context->environment->getMode()->value)
             ->registerPathAliases([
                 'app' => $this->appPath,
                 'vendor' => $this->appPath . '/vendor'
@@ -263,7 +263,7 @@ class Hub implements HubInterface
 
 
         // Namespaces
-        foreach (static::ARCHETYPE_ALIASES as $interface => $classExt) {
+        foreach (static::ArchetypeAliases as $interface => $classExt) {
             Archetype::alias(
                 $interface,
                 Fabric::class . '\\' . $classExt // @phpstan-ignore-line

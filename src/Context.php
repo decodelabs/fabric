@@ -15,9 +15,7 @@ use DecodeLabs\Genesis\Context as Genesis;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Veneer;
-use DecodeLabs\Veneer\LazyLoad;
 
-#[LazyLoad]
 class Context
 {
     protected Genesis $genesis;

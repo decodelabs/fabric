@@ -17,7 +17,7 @@ require_once dirname(__DIR__, 3) . '/genesis/src/Bootstrap.php';
 
 class Bootstrap extends Base
 {
-    public const SOURCE_ARGUMENTS = [
+    protected const SourceArguments = [
         '--fabric-source'
     ];
 
@@ -83,7 +83,7 @@ class Bootstrap extends Base
         $sourceMode = false;
         $args = $_SERVER['argv'] ?? [];
 
-        foreach (static::SOURCE_ARGUMENTS as $arg) {
+        foreach (static::SourceArguments as $arg) {
             if (in_array($arg, $args)) {
                 $sourceMode = true;
                 break;

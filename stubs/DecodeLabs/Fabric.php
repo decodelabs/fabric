@@ -15,8 +15,8 @@ class Fabric implements Proxy
 {
     use ProxyTrait;
 
-    const VENEER = 'DecodeLabs\\Fabric';
-    const VENEER_TARGET = Inst::class;
+    const Veneer = 'DecodeLabs\\Fabric';
+    const VeneerTarget = Inst::class;
 
     public static Inst $instance;
 
