@@ -24,7 +24,7 @@ use Psr\Http\Server\RequestHandlerInterface as PsrHandler;
 
 class Http implements Kernel
 {
-    public const MIDDLEWARE = [
+    public const Middleware = [
         // Error
         'ErrorHandler',
 
@@ -80,7 +80,7 @@ class Http implements Kernel
         $output = [];
         $i = 0;
 
-        foreach (Fabric::getApp()->getHttpMiddleware() ?? static::MIDDLEWARE as $key => $value) {
+        foreach (Fabric::getApp()->getHttpMiddleware() ?? static::Middleware as $key => $value) {
             if (is_int($key)) {
                 if (is_string($value)) {
                     $key = $value;
