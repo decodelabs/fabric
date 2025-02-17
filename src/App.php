@@ -18,15 +18,14 @@ use Psr\Http\Server\RequestHandlerInterface as PsrHandler;
 
 interface App
 {
-    /**
-     * Get app namespace
-     */
-    public function getNamespace(): ?string;
+    public ?string $namespace { get; }
 
     /**
      * Perform any loader initialization
      */
-    public function initializeLoaders(StackLoader $stack): void;
+    public function initializeLoaders(
+        StackLoader $stack
+    ): void;
 
     /**
      * Perform any platform initialization
@@ -39,5 +38,5 @@ interface App
      *
      * @return array<int|string,array<mixed>|string|class-string<PsrMiddleware>|PsrMiddleware|Closure(PsrRequest, PsrHandler):PsrResponse>
      */
-    public function getHttpMiddleware(): ?array;
+    public function prepareHttpMiddleware(): ?array;
 }

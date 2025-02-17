@@ -116,7 +116,9 @@ class BuildManifest implements Manifest
                 break;
 
             default:
-                throw Exceptional::Setup('Unknown package: ' . $package->name);
+                throw Exceptional::Setup(
+                    message: 'Unknown package: ' . $package->name
+                );
         }
     }
 
@@ -148,7 +150,7 @@ class BuildManifest implements Manifest
             'const BUILD_TIMESTAMP = ' . time() . ';' . "\n" .
             'const BUILD_ID = \'' . $this->buildId . '\';' . "\n" .
             'const BUILD_ROOT_PATH = __DIR__;' . "\n" .
-            'const BUILD_ENV_MODE = \'' . Genesis::$environment->getMode()->value . '\';'
+            'const BUILD_ENV_MODE = \'' . Genesis::$environment->mode->value . '\';'
         );
     }
 

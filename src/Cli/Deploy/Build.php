@@ -28,7 +28,7 @@ class Build implements Task
 
 
         // Setup controller
-        $handler = Genesis::$build->getHandler();
+        $handler = Genesis::$build->handler;
 
         if (Cli::$command['clear']) {
             // Clear

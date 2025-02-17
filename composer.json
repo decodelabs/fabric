@@ -11,24 +11,24 @@
     "repositories": {
     },
     "require": {
-        "php": "^8.1",
+        "php": "^8.4",
 
-        "decodelabs/archetype": "^0.3",
-        "decodelabs/clip": "^0.3.8",
-        "decodelabs/coercion": "^0.2.7",
-        "decodelabs/dovetail": "^0.2",
-        "decodelabs/exceptional": "^0.4.4",
-        "decodelabs/genesis": "^0.9",
-        "decodelabs/glitch": "^0.18.9",
-        "decodelabs/greenleaf": "^0.3",
-        "decodelabs/harvest": "^0.3",
-        "decodelabs/lucid": "^0.4.7",
-        "decodelabs/systemic": "^0.11.9",
-        "decodelabs/veneer": "^0.11.6"
+        "decodelabs/archetype": "^0.3.8",
+        "decodelabs/clip": "^0.3.16",
+        "decodelabs/coercion": "^0.2.15",
+        "decodelabs/dovetail": "^0.2.9",
+        "decodelabs/exceptional": "^0.5.3",
+        "decodelabs/genesis": "^0.10",
+        "decodelabs/glitch": "^0.19",
+        "decodelabs/greenleaf": "^0.4",
+        "decodelabs/harvest": "^0.4",
+        "decodelabs/lucid": "^0.5",
+        "decodelabs/systemic": "^0.11.15",
+        "decodelabs/veneer": "^0.12.3"
     },
     "require-dev": {
-        "decodelabs/phpstan-decodelabs": "^0.6.7",
-        "decodelabs/stash": "^0.5.6"
+        "decodelabs/phpstan-decodelabs": "^0.7",
+        "decodelabs/stash": "^0.6"
     },
     "autoload": {
         "psr-4": {
@@ -40,7 +40,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-develop": "0.3.x-dev"
+            "dev-develop": "0.4.x-dev"
         }
     },
     "config": {

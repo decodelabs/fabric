@@ -38,13 +38,36 @@ class Hub implements HubInterface
 {
     use CastTrait;
 
-    protected const ArchetypeAliases = [
+    /**
+     * @var array<string,string>
+     */
+    protected const array ArchetypeAliases = [
         ClipTask::class => 'Cli',
         Greenleaf::class . '\\*' => 'Http'
     ];
 
     protected ?string $envId = null;
-    protected string $appPath;
+
+    protected(set) string $applicationPath;
+
+    public string $localDataPath {
+        get => $this->localDataPath ??= $this->applicationPath . '/' . ltrim(
+            EnvironmentConfig::load()->getLocalDataPath(),
+            '/'
+        );
+    }
+
+    public string $sharedDataPath {
+        get => $this->sharedDataPath ??= $this->applicationPath . '/' . ltrim(
+            EnvironmentConfig::load()->getSharedDataPath(),
+            '/'
+        );
+    }
+
+    public string $applicationName {
+        get => $this->applicationName ??= EnvironmentConfig::load()->getAppName();
+    }
+
     protected ?AnalysisMode $analysisMode = null;
     protected App $app;
     protected Context $context;
@@ -70,7 +93,9 @@ class Hub implements HubInterface
         array $options
     ): void {
         if (!$appDir = getcwd()) {
-            throw Exceptional::Runtime('Unable to get current working directory');
+            throw Exceptional::Runtime(
+                message: 'Unable to get current working directory'
+            );
         }
 
         $hasAppFile = file_exists($appDir . '/src/App.php');
@@ -82,7 +107,7 @@ class Hub implements HubInterface
             $appDir = dirname(dirname(__DIR__)) . '/tests';
         }
 
-        $this->appPath = $appDir;
+        $this->applicationPath = $appDir;
     }
 
     /**
@@ -91,7 +116,7 @@ class Hub implements HubInterface
     protected function prepareForRun(
         array $options
     ): void {
-        $this->appPath = rtrim(Coercion::toString($options['appPath']), '/');
+        $this->applicationPath = rtrim(Coercion::toString($options['applicationPath']), '/');
     }
 
     /**
@@ -99,7 +124,7 @@ class Hub implements HubInterface
      */
     public function getApplicationPath(): string
     {
-        return $this->appPath;
+        return $this->applicationPath;
     }
 
     /**
@@ -107,16 +132,7 @@ class Hub implements HubInterface
      */
     public function getLocalDataPath(): string
     {
-        static $path;
-
-        if (!isset($path)) {
-            $path = $this->appPath . '/' . ltrim(
-                EnvironmentConfig::load()->getLocalDataPath(),
-                '/'
-            );
-        }
-
-        return $path;
+        return $this->localDataPath;
     }
 
     /**
@@ -124,16 +140,7 @@ class Hub implements HubInterface
      */
     public function getSharedDataPath(): string
     {
-        static $path;
-
-        if (!isset($path)) {
-            $path = $this->appPath . '/' . ltrim(
-                EnvironmentConfig::load()->getSharedDataPath(),
-                '/'
-            );
-        }
-
-        return $path;
+        return $this->sharedDataPath;
     }
 
     /**
@@ -141,13 +148,7 @@ class Hub implements HubInterface
      */
     public function getApplicationName(): string
     {
-        static $name;
-
-        if (!isset($name)) {
-            $name = EnvironmentConfig::load()->getAppName();
-        }
-
-        return $name;
+        return $this->applicationName;
     }
 
     /**
@@ -165,22 +166,22 @@ class Hub implements HubInterface
 
         // Work out root path
         if (
-            /** @phpstan-ignore-next-line */
+            // @phpstan-ignore-next-line
             Fabric\BUILD_ROOT_PATH !== null &&
-            is_dir((string)Fabric\BUILD_ROOT_PATH)
+            is_dir($path = Coercion::toString(Fabric\BUILD_ROOT_PATH))
         ) {
-            $buildPath = Fabric\BUILD_ROOT_PATH;
+            $buildPath = $path;
         } elseif ($this->analysisMode) {
             $buildPath = dirname(dirname(__DIR__));
         } else {
-            $buildPath = $this->appPath . '/vendor/decodelabs/fabric';
+            $buildPath = $this->applicationPath . '/vendor/decodelabs/fabric';
         }
 
         // Create build info
         return new Build(
             $this->context,
             $buildPath,
-            Fabric\BUILD_TIMESTAMP
+            Coercion::toIntOrNull(Fabric\BUILD_TIMESTAMP)
         );
     }
 
@@ -191,14 +192,14 @@ class Hub implements HubInterface
         StackLoader $stack
     ): void {
         // Dovetail
-        if ($this->context->build->isCompiled()) {
+        if ($this->context->build->compiled) {
             Dovetail::setEnvPath($this->context->build->path);
 
             Dovetail::setFinder(new DovetailFinder(
                 $this->context->build->path
             ));
         } else {
-            Dovetail::setEnvPath($this->appPath);
+            Dovetail::setEnvPath($this->applicationPath);
         }
 
 
@@ -240,10 +241,12 @@ class Hub implements HubInterface
 
         /** @var class-string<EnvConfig\Development|EnvConfig\Testing|EnvConfig\Production> */
         $class = EnvConfig::class . '\\' . $name;
-        $output = new $class($this->envId ?? EnvironmentConfig::load()->getName());
 
-        $output->setUmask(0);
+        $output = new $class(
+            $this->envId ?? EnvironmentConfig::load()->getName()
+        );
 
+        $output->umask = 0;
         return $output;
     }
 
@@ -254,10 +257,10 @@ class Hub implements HubInterface
     {
         // Setup Glitch
         Glitch::setStartTime($this->context->getStartTime())
-            ->setRunMode($this->context->environment->getMode()->value)
+            ->setRunMode($this->context->environment->mode->value)
             ->registerPathAliases([
-                'app' => $this->appPath,
-                'vendor' => $this->appPath . '/vendor'
+                'app' => $this->applicationPath,
+                'vendor' => $this->applicationPath . '/vendor'
             ])
             ->registerAsErrorHandler();
 
@@ -266,7 +269,7 @@ class Hub implements HubInterface
         foreach (static::ArchetypeAliases as $interface => $classExt) {
             Archetype::alias(
                 $interface,
-                Fabric::class . '\\' . $classExt // @phpstan-ignore-line
+                Fabric::class . '\\' . $classExt
             );
         }
 
@@ -325,7 +328,7 @@ class Hub implements HubInterface
         }
 
         throw Exceptional::UnexpectedValue(
-            'Unable to detect run mode (' . \PHP_SAPI . ')'
+            message: 'Unable to detect run mode (' . \PHP_SAPI . ')'
         );
     }
 
