@@ -14,7 +14,7 @@ use DecodeLabs\Genesis\Loader\Stack as StackLoader;
 
 class Generic implements App
 {
-    protected ?string $namespace;
+    protected(set) ?string $namespace;
 
     /**
      * Init with app namespace
@@ -23,14 +23,6 @@ class Generic implements App
         ?string $namespace
     ) {
         $this->namespace = $namespace;
-    }
-
-    /**
-     * Get app namespace
-     */
-    public function getNamespace(): ?string
-    {
-        return $this->namespace;
     }
 
     /**
@@ -51,7 +43,7 @@ class Generic implements App
     /**
      * Get middleware list
      */
-    public function getHttpMiddleware(): ?array
+    public function prepareHttpMiddleware(): ?array
     {
         return null;
     }

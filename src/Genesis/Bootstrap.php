@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Fabric\Genesis;
 
+use DecodeLabs\Coercion;
 use DecodeLabs\Genesis;
 use DecodeLabs\Genesis\Bootstrap as Base;
 use Exception;
@@ -17,12 +18,15 @@ require_once dirname(__DIR__, 3) . '/genesis/src/Bootstrap.php';
 
 class Bootstrap extends Base
 {
-    protected const SourceArguments = [
+    /**
+     * @var list<string>
+     */
+    protected const array SourceArguments = [
         '--fabric-source'
     ];
 
-    protected string $hubClass = Hub::class;
-    protected string $appPath;
+    protected(set) string $hubClass = Hub::class;
+    protected(set) string $applicationPath;
 
     protected string $vendorPath = 'vendor';
     protected string $buildVendorPath;
@@ -32,38 +36,23 @@ class Bootstrap extends Base
      */
     public function __construct(
         ?string $hubClass = null,
-        ?string $appPath = null,
+        ?string $applicationPath = null,
         ?string $vendorPath = null,
         ?string $buildVendorPath = null
     ) {
         $this->hubClass = $hubClass ?? $this->hubClass;
-        $this->appPath = $appPath ?? $this->getDefaultAppPath();
+        $this->applicationPath = $applicationPath ?? $this->prepareDefaultAppPath();
         $this->vendorPath = $vendorPath ?? $this->vendorPath;
         $this->buildVendorPath = $buildVendorPath ?? $this->vendorPath;
     }
 
-    /**
-     * Get hub class
-     */
-    public function getHubClass(): string
-    {
-        return $this->hubClass;
-    }
-
-    /**
-     * Get app path
-     */
-    public function getAppPath(): string
-    {
-        return $this->appPath;
-    }
 
     /**
      * Get default app path
      */
-    public function getDefaultAppPath(): string
+    protected function prepareDefaultAppPath(): string
     {
-        $entryPath = $_SERVER['SCRIPT_FILENAME'];
+        $entryPath = Coercion::toString($_SERVER['SCRIPT_FILENAME']);
 
         if (!str_contains($entryPath, '/' . $this->vendorPath . '/')) {
             throw new Exception(
@@ -81,6 +70,7 @@ class Bootstrap extends Base
     {
         // Do we need to force loading source?
         $sourceMode = false;
+        /** @var array<string> */
         $args = $_SERVER['argv'] ?? [];
 
         foreach (static::SourceArguments as $arg) {
@@ -91,7 +81,7 @@ class Bootstrap extends Base
         }
 
         if (!$sourceMode) {
-            $runPath = $this->appPath . '/data/local/run';
+            $runPath = $this->applicationPath . '/data/local/run';
 
             $paths = [
                 $runPath . '/active1/run.php' => $runPath . '/active1/' . $this->buildVendorPath,
@@ -101,7 +91,7 @@ class Bootstrap extends Base
             $paths = [];
         }
 
-        $paths[__FILE__] = $this->appPath . '/' . $this->vendorPath;
+        $paths[__FILE__] = $this->applicationPath . '/' . $this->vendorPath;
 
         return $paths;
     }
@@ -115,7 +105,10 @@ class Bootstrap extends Base
     ): void {
         // Run app
         $kernel = Genesis::initialize($this->hubClass, [
-            'appPath' => $this->getAppPath(),
+            'applicationPath' => $this->applicationPath,
+
+            // Deprecated - kept for compatibility
+            'appPath' => $this->applicationPath,
         ]);
 
         $kernel->run();
