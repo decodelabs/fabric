@@ -1,3 +1,6 @@
+## v0.4.1 (2025-02-19)
+* Removed Coercion from Bootstrap
+
 ## v0.4.0 (2025-02-17)
 * Replaced accessors with property hooks
 * Mounted App as Veneer plugin
