@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Fabric\Genesis;
 
-use DecodeLabs\Coercion;
 use DecodeLabs\Genesis;
 use DecodeLabs\Genesis\Bootstrap as Base;
 use Exception;
@@ -52,7 +51,8 @@ class Bootstrap extends Base
      */
     protected function prepareDefaultAppPath(): string
     {
-        $entryPath = Coercion::toString($_SERVER['SCRIPT_FILENAME']);
+        /** @var string $entryPath */
+        $entryPath = $_SERVER['SCRIPT_FILENAME'];
 
         if (!str_contains($entryPath, '/' . $this->vendorPath . '/')) {
             throw new Exception(
