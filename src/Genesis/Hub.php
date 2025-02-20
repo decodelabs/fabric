@@ -48,6 +48,10 @@ class Hub implements HubInterface
 
     protected ?string $envId = null;
 
+    public string $applicationName {
+        get => $this->applicationName ??= EnvironmentConfig::load()->getAppName();
+    }
+
     protected(set) string $applicationPath;
 
     public string $localDataPath {
@@ -64,8 +68,8 @@ class Hub implements HubInterface
         );
     }
 
-    public string $applicationName {
-        get => $this->applicationName ??= EnvironmentConfig::load()->getAppName();
+    public ?BuildManifestInterface $buildManifest {
+        get => new BuildManifest(Cli::getSession());
     }
 
     protected ?AnalysisMode $analysisMode = null;
@@ -116,39 +120,7 @@ class Hub implements HubInterface
     protected function prepareForRun(
         array $options
     ): void {
-        $this->applicationPath = rtrim(Coercion::toString($options['applicationPath']), '/');
-    }
-
-    /**
-     * Get application path
-     */
-    public function getApplicationPath(): string
-    {
-        return $this->applicationPath;
-    }
-
-    /**
-     * Get local data path
-     */
-    public function getLocalDataPath(): string
-    {
-        return $this->localDataPath;
-    }
-
-    /**
-     * Get shared data path
-     */
-    public function getSharedDataPath(): string
-    {
-        return $this->sharedDataPath;
-    }
-
-    /**
-     * Get application name
-     */
-    public function getApplicationName(): string
-    {
-        return $this->applicationName;
+        $this->applicationPath = rtrim(Coercion::asString($options['applicationPath']), '/');
     }
 
     /**
@@ -168,7 +140,7 @@ class Hub implements HubInterface
         if (
             // @phpstan-ignore-next-line
             Fabric\BUILD_ROOT_PATH !== null &&
-            is_dir($path = Coercion::toString(Fabric\BUILD_ROOT_PATH))
+            is_dir($path = Coercion::asString(Fabric\BUILD_ROOT_PATH))
         ) {
             $buildPath = $path;
         } elseif ($this->analysisMode) {
@@ -181,7 +153,7 @@ class Hub implements HubInterface
         return new Build(
             $this->context,
             $buildPath,
-            Coercion::toIntOrNull(Fabric\BUILD_TIMESTAMP)
+            Coercion::tryInt(Fabric\BUILD_TIMESTAMP)
         );
     }
 
@@ -330,13 +302,5 @@ class Hub implements HubInterface
         throw Exceptional::UnexpectedValue(
             message: 'Unable to detect run mode (' . \PHP_SAPI . ')'
         );
-    }
-
-    /**
-     * Get Build Manifest
-     */
-    public function getBuildManifest(): ?BuildManifestInterface
-    {
-        return new BuildManifest(Cli::getSession());
     }
 }

@@ -54,7 +54,7 @@ class BuildManifest implements Manifest
      */
     public function getBuildTempDir(): Dir
     {
-        return Atlas::dir(Genesis::$hub->getLocalDataPath() . '/build/');
+        return Atlas::dir(Genesis::$hub->localDataPath . '/build/');
     }
 
     /**
@@ -62,7 +62,7 @@ class BuildManifest implements Manifest
      */
     public function getRunDir(): Dir
     {
-        return Atlas::dir(Genesis::$hub->getLocalDataPath() . '/run/');
+        return Atlas::dir(Genesis::$hub->localDataPath . '/run/');
     }
 
     /**
@@ -100,7 +100,7 @@ class BuildManifest implements Manifest
         // App
         yield new Package(
             'app',
-            Atlas::dir(Genesis::$hub->getApplicationPath())
+            Atlas::dir(Genesis::$hub->applicationPath)
         );
     }
 

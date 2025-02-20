@@ -37,7 +37,7 @@ class Update implements Task
         // Git pull
         Systemic::run(
             ['git', 'pull'],
-            Genesis::$hub->getApplicationPath()
+            Genesis::$hub->applicationPath
         );
 
         Cli::newLine();
@@ -56,7 +56,7 @@ class Update implements Task
 
         Systemic::run(
             ['composer', 'install', ...$args],
-            Genesis::$hub->getApplicationPath()
+            Genesis::$hub->applicationPath
         );
 
         Cli::newLine();
