@@ -1,3 +1,7 @@
+## v0.4.2 (2025-02-20)
+* Upgraded Coercion dependency
+* Upgraded Genesis dependency
+
 ## v0.4.1 (2025-02-19)
 * Removed Coercion from Bootstrap
 

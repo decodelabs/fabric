@@ -15,10 +15,10 @@
 
         "decodelabs/archetype": "^0.3.8",
         "decodelabs/clip": "^0.3.16",
-        "decodelabs/coercion": "^0.2.15",
+        "decodelabs/coercion": "^0.3",
         "decodelabs/dovetail": "^0.2.9",
         "decodelabs/exceptional": "^0.5.3",
-        "decodelabs/genesis": "^0.10",
+        "decodelabs/genesis": "^0.11",
         "decodelabs/glitch": "^0.19",
         "decodelabs/greenleaf": "^0.4",
         "decodelabs/harvest": "^0.4",

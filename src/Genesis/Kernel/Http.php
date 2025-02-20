@@ -42,6 +42,10 @@ class Http implements Kernel
         'Greenleaf'
     ];
 
+    public string $mode {
+        get => 'Http';
+    }
+
     protected Dispatcher $dispatcher;
     protected Request $request;
     protected Context $context;
@@ -97,14 +101,6 @@ class Http implements Kernel
         }
 
         return $output;
-    }
-
-    /**
-     * Get run mode
-     */
-    public function getMode(): string
-    {
-        return 'Http';
     }
 
     /**
