@@ -23,7 +23,7 @@ class Environment implements Config
     {
         return [
             'mode' => "{{envString('ENV_MODE', 'production')}:development}",
-            'name' => "{{envString('ENV_NAME')}",
+            'name' => "{{envString('ENV_NAME')}}",
             'appNamespace' => '{{Vendor\\AppName::class}}',
             'appName' => 'Fabric',
             'localDataPath' => 'data/local',
