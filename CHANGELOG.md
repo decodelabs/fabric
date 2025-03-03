@@ -1,3 +1,6 @@
+## v0.4.3 (2025-03-03)
+* Fixed Environment Config app name template
+
 ## v0.4.2 (2025-02-20)
 * Upgraded Coercion dependency
 * Upgraded Genesis dependency
