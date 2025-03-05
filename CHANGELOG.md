@@ -1,3 +1,7 @@
+## v0.4.4 (2025-03-05)
+* Added placeholder for Zest middleware
+* Upgraded Greenleaf
+
 ## v0.4.3 (2025-03-03)
 * Fixed Environment Config app name template
 

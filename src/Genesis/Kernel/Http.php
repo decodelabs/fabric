@@ -39,6 +39,7 @@ class Http implements Kernel
         'ContentSecurityPolicy',
 
         // Generators
+        '?Zest',
         'Greenleaf'
     ];
 
@@ -120,7 +121,5 @@ class Http implements Kernel
     /**
      * Shutdown app
      */
-    public function shutdown(): void
-    {
-    }
+    public function shutdown(): void {}
 }
