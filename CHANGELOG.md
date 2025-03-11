@@ -1,3 +1,6 @@
+## v0.5.2 (2025-03-11)
+* Added cwd analysis build path
+
 ## v0.5.1 (2025-03-11)
 * Removed analysis mode build path
 
