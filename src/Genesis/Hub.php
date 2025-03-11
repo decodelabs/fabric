@@ -143,8 +143,6 @@ class Hub implements HubInterface
             is_dir($path = Coercion::asString(Fabric\BUILD_ROOT_PATH))
         ) {
             $buildPath = $path;
-        } elseif ($this->analysisMode) {
-            $buildPath = dirname(dirname(__DIR__));
         } else {
             $buildPath = $this->applicationPath;
         }

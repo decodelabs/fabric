@@ -1,3 +1,6 @@
+## v0.5.1 (2025-03-11)
+* Removed analysis mode build path
+
 ## v0.5.0 (2025-03-11)
 * Added public and .iota to build manifest
 * Simplified build path handling
