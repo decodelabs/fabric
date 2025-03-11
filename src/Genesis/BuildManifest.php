@@ -131,7 +131,9 @@ class BuildManifest implements Manifest
     ): Generator {
         $appDir = $package->source;
 
+        yield $appDir->getDir('.iota') => '.iota/';
         yield $appDir->getDir('config') => 'config/';
+        yield $appDir->getDir('public') => 'public/';
         yield $appDir->getDir('src') => 'src/';
         yield $appDir->getDir('vendor') => 'vendor/';
 

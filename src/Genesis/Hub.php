@@ -146,7 +146,7 @@ class Hub implements HubInterface
         } elseif ($this->analysisMode) {
             $buildPath = dirname(dirname(__DIR__));
         } else {
-            $buildPath = $this->applicationPath . '/vendor/decodelabs/fabric';
+            $buildPath = $this->applicationPath;
         }
 
         // Create build info
