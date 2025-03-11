@@ -1,3 +1,7 @@
+## v0.5.0 (2025-03-11)
+* Added public and .iota to build manifest
+* Simplified build path handling
+
 ## v0.4.4 (2025-03-05)
 * Added placeholder for Zest middleware
 * Upgraded Greenleaf
