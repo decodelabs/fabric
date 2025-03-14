@@ -14,21 +14,21 @@
         "php": "^8.4",
 
         "decodelabs/archetype": "^0.3.8",
-        "decodelabs/clip": "^0.3.16",
-        "decodelabs/coercion": "^0.3",
-        "decodelabs/dovetail": "^0.2.9",
+        "decodelabs/clip": "^0.3.17",
+        "decodelabs/coercion": "^0.3.2",
+        "decodelabs/dovetail": "^0.2.10",
         "decodelabs/exceptional": "^0.5.3",
-        "decodelabs/genesis": "^0.11",
-        "decodelabs/glitch": "^0.19",
-        "decodelabs/greenleaf": "^0.5",
-        "decodelabs/harvest": "^0.4",
-        "decodelabs/lucid": "^0.5",
-        "decodelabs/systemic": "^0.11.15",
-        "decodelabs/veneer": "^0.12.3"
+        "decodelabs/genesis": "^0.11.2",
+        "decodelabs/glitch": "^0.19.4",
+        "decodelabs/greenleaf": "^0.6",
+        "decodelabs/harvest": "^0.4.5",
+        "decodelabs/lucid": "^0.5.1",
+        "decodelabs/systemic": "^0.11.16",
+        "decodelabs/veneer": "^0.12.6"
     },
     "require-dev": {
         "decodelabs/phpstan-decodelabs": "^0.7",
-        "decodelabs/stash": "^0.6"
+        "decodelabs/stash": "^0.6.1"
     },
     "autoload": {
         "psr-4": {

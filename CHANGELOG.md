@@ -1,3 +1,6 @@
+## v0.5.3 (2025-03-14)
+* Upgraded Greenleaf
+
 ## v0.5.2 (2025-03-11)
 * Added cwd analysis build path
 
