@@ -12,6 +12,7 @@ namespace DecodeLabs\Fabric\Cli\Deploy;
 use DecodeLabs\Clip\Task;
 use DecodeLabs\Fabric;
 use DecodeLabs\Genesis;
+use DecodeLabs\Monarch;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
 
@@ -37,7 +38,7 @@ class Update implements Task
         // Git pull
         Systemic::run(
             ['git', 'pull'],
-            Genesis::$hub->applicationPath
+            Monarch::$paths->root
         );
 
         Cli::newLine();
@@ -50,13 +51,13 @@ class Update implements Task
 
         $args = [];
 
-        if (!Genesis::$environment->isDevelopment()) {
+        if (!Monarch::isDevelopment()) {
             $args[] = '--no-dev';
         }
 
         Systemic::run(
             ['composer', 'install', ...$args],
-            Genesis::$hub->applicationPath
+            Monarch::$paths->root
         );
 
         Cli::newLine();

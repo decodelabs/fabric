@@ -1,4 +1,9 @@
 parameters:
+    bootstrapFiles:
+        - %currentWorkingDirectory%/tests/bootstrap.php
+
     paths:
         - src
+        - tests
+
     level: max

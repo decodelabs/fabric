@@ -67,7 +67,7 @@ class Http implements Kernel
     {
         // Dispatcher
         $this->dispatcher = new Dispatcher(
-            $this->context->container
+            Fabric::$container
         );
 
         // Middleware
@@ -121,5 +121,7 @@ class Http implements Kernel
     /**
      * Shutdown app
      */
-    public function shutdown(): void {}
+    public function shutdown(): never {
+        exit;
+    }
 }

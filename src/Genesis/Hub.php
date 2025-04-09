@@ -15,13 +15,14 @@ use DecodeLabs\Clip\Controller as ClipController;
 use DecodeLabs\Clip\Kernel as ClipKernel;
 use DecodeLabs\Clip\Task as ClipTask;
 use DecodeLabs\Coercion;
-use DecodeLabs\Dovetail;
-use DecodeLabs\Dovetail\Finder\Generic as DovetailFinder;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Fabric;
 use DecodeLabs\Fabric\App;
 use DecodeLabs\Fabric\Dovetail\Config\Environment as EnvironmentConfig;
+use DecodeLabs\Fabric\Genesis\Build\Manifest as BuildManifest;
 use DecodeLabs\Fluidity\CastTrait;
+use DecodeLabs\Genesis\Bootstrap;
+use DecodeLabs\Genesis\Bootstrap\Analysis as AnalysisBootstrap;
 use DecodeLabs\Genesis\Build;
 use DecodeLabs\Genesis\Build\Manifest as BuildManifestInterface;
 use DecodeLabs\Genesis\Context;
@@ -31,6 +32,7 @@ use DecodeLabs\Genesis\Kernel;
 use DecodeLabs\Genesis\Loader\Stack as StackLoader;
 use DecodeLabs\Glitch;
 use DecodeLabs\Greenleaf;
+use DecodeLabs\Monarch;
 use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Veneer;
 
@@ -48,28 +50,8 @@ class Hub implements HubInterface
 
     protected ?string $envId = null;
 
-    public string $applicationName {
-        get => $this->applicationName ??= EnvironmentConfig::load()->getAppName();
-    }
-
-    protected(set) string $applicationPath;
-
-    public string $localDataPath {
-        get => $this->localDataPath ??= $this->applicationPath . '/' . ltrim(
-            EnvironmentConfig::load()->getLocalDataPath(),
-            '/'
-        );
-    }
-
-    public string $sharedDataPath {
-        get => $this->sharedDataPath ??= $this->applicationPath . '/' . ltrim(
-            EnvironmentConfig::load()->getSharedDataPath(),
-            '/'
-        );
-    }
-
     public ?BuildManifestInterface $buildManifest {
-        get => new BuildManifest(Cli::getSession());
+        get => new BuildManifest();
     }
 
     protected ?AnalysisMode $analysisMode = null;
@@ -78,31 +60,22 @@ class Hub implements HubInterface
 
     public function __construct(
         Context $context,
-        array $options
+        Bootstrap $bootstrap
     ) {
         $this->context = $context;
 
-        if ($options['analysis'] ?? false) {
-            $this->prepareForAnalysis($options);
-            return;
+        if ($bootstrap instanceof AnalysisBootstrap) {
+            $this->prepareForAnalysis($bootstrap);
         }
-
-        $this->prepareForRun($options);
     }
 
-    /**
-     * @param array<string, mixed> $options
-     */
     protected function prepareForAnalysis(
-        array $options
+        AnalysisBootstrap $bootstrap
     ): void {
-        if (!$appDir = getcwd()) {
-            throw Exceptional::Runtime(
-                message: 'Unable to get current working directory'
-            );
-        }
-
-        $hasAppFile = file_exists($appDir . '/src/App.php');
+        $appDir = $bootstrap->rootPath;
+        $hasAppFile =
+            file_exists($appDir . '/src/App.php') &&
+            !file_exists($appDir . '/src/Context.php');
 
         if ($hasAppFile) {
             $this->analysisMode = AnalysisMode::App;
@@ -111,16 +84,7 @@ class Hub implements HubInterface
             $appDir = dirname(dirname(__DIR__)) . '/tests';
         }
 
-        $this->applicationPath = $appDir;
-    }
-
-    /**
-     * @param array<string, mixed> $options
-     */
-    protected function prepareForRun(
-        array $options
-    ): void {
-        $this->applicationPath = rtrim(Coercion::asString($options['applicationPath']), '/');
+        Monarch::$paths->root = $appDir;
     }
 
     /**
@@ -146,7 +110,7 @@ class Hub implements HubInterface
         } elseif ($this->analysisMode === AnalysisMode::Self) {
             $buildPath = (string)getcwd();
         } else {
-            $buildPath = $this->applicationPath;
+            $buildPath = Monarch::$paths->root;
         }
 
         // Create build info
@@ -163,18 +127,6 @@ class Hub implements HubInterface
     public function initializeLoaders(
         StackLoader $stack
     ): void {
-        // Dovetail
-        if ($this->context->build->compiled) {
-            Dovetail::setEnvPath($this->context->build->path);
-
-            Dovetail::setFinder(new DovetailFinder(
-                $this->context->build->path
-            ));
-        } else {
-            Dovetail::setEnvPath($this->applicationPath);
-        }
-
-
         // Archetype
         Archetype::map(
             'DecodeLabs',
@@ -182,17 +134,26 @@ class Hub implements HubInterface
             1
         );
 
+        // Config
+        if($this->analysisMode !== AnalysisMode::Self) {
+            $config = EnvironmentConfig::load();
+            Monarch::setApplicationName($config->getAppName());
+            Monarch::$paths->localData = Monarch::$paths->root . '/' . ltrim($config->getLocalDataPath(), '/');
+            Monarch::$paths->sharedData = Monarch::$paths->root . '/' . ltrim($config->getSharedDataPath(), '/');
 
-        // App
-        $namespace = EnvironmentConfig::load()->getAppNamespace();
+            // App
+            $namespace = $config->getAppNamespace();
 
-        if ($namespace !== null) {
-            Archetype::map('DecodeLabs', $namespace, 10);
-            Archetype::alias(Fabric::class, $namespace, 11);
-            Archetype::alias(App::class, $namespace);
+            if ($namespace !== null) {
+                Archetype::map('DecodeLabs', $namespace, 10);
+                Archetype::alias(Fabric::class, $namespace, 11);
+                Archetype::alias(App::class, $namespace);
+            }
+        } else {
+            $namespace = null;
         }
 
-        $this->app = $this->context->container->getWith(App::class, [
+        $this->app = Fabric::$container->getWith(App::class, [
             'namespace' => $namespace
         ]);
 
@@ -229,10 +190,10 @@ class Hub implements HubInterface
     {
         // Setup Glitch
         Glitch::setStartTime($this->context->getStartTime())
-            ->setRunMode($this->context->environment->mode->value)
+            ->setRunMode(Monarch::getEnvironmentMode()->value)
             ->registerPathAliases([
-                'app' => $this->applicationPath,
-                'vendor' => $this->applicationPath . '/vendor'
+                'app' => Monarch::$paths->root,
+                'vendor' => Monarch::$paths->root . '/vendor'
             ])
             ->registerAsErrorHandler();
 
@@ -246,13 +207,8 @@ class Hub implements HubInterface
         }
 
         // Clip
-        $this->context->container->bindShared(
+        Fabric::$container->bindShared(
             ClipController::class
-        );
-
-        Veneer::register(
-            ClipController::class,
-            ClipNamespace::class // @phpstan-ignore-line
         );
 
 

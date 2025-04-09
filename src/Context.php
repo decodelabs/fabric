@@ -11,7 +11,9 @@ namespace DecodeLabs\Fabric;
 
 use DecodeLabs\Clip\Controller as ClipController;
 use DecodeLabs\Fabric;
-use DecodeLabs\Genesis\Context as Genesis;
+use DecodeLabs\Genesis;
+use DecodeLabs\Monarch;
+use DecodeLabs\Pandora\Container;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Veneer;
@@ -21,15 +23,25 @@ class Context
 {
     #[Plugin]
     public App $app {
-        get => $this->genesis->container->get(App::class);
+        get => $this->container->get(App::class);
     }
 
-    protected Genesis $genesis;
+    #[Plugin]
+    public Container $container {
+        get {
+            if(isset($this->container)) {
+                return $this->container;
+            }
 
-    public function __construct(
-        Genesis $genesis
-    ) {
-        $this->genesis = $genesis;
+            if(!Monarch::$container instanceof Container) {
+                $this->container = new Container();
+                Monarch::replaceContainer($this->container);
+            } else {
+                $this->container = Monarch::$container;
+            }
+
+            return $this->container;
+        }
     }
 
     /**
@@ -37,7 +49,7 @@ class Context
      */
     public function getTaskController(): ClipController
     {
-        return $this->genesis->container->get(ClipController::class);
+        return $this->container->get(ClipController::class);
     }
 
     /**
@@ -45,7 +57,7 @@ class Context
      */
     public function ensureCliSource(): void
     {
-        if (!$this->genesis->build->compiled) {
+        if (!Genesis::$build->compiled) {
             return;
         }
 
@@ -57,8 +69,7 @@ class Context
         $args[] = '--fabric-source';
 
         Systemic::runScript($args);
-        $this->genesis->shutdown();
-        exit;
+        Genesis::$kernel->shutdown();
     }
 }
 
