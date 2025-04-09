@@ -1,3 +1,13 @@
+## v0.6.0 (2025-04-09)
+* Upgraded Genesis dependency
+* Refactored Bootstrap handling
+* Upgraded Kernel interface
+* Moved build tasks to scannable namespace
+* Simplified build manifest
+* Replaced Genesis info with Monarch
+* Fixed PHPStan test bootstrap
+* Added PSR container to Fabric frontage
+
 ## v0.5.3 (2025-03-14)
 * Upgraded Greenleaf
 

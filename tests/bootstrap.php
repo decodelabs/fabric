@@ -2,9 +2,9 @@
 
 require_once 'vendor/autoload.php';
 
-use DecodeLabs\Genesis;
+use DecodeLabs\Genesis\Bootstrap\Analysis;
 use DecodeLabs\Fabric\Genesis\Hub;
 
-Genesis::initialize(Hub::class, [
-    'analysis' => true
-]);
+new Analysis(
+    hubClass: Hub::class
+)->initializeOnly();
