@@ -11,8 +11,6 @@
 
 Fabric provides the structures, prerequisites and conventions for building a web application using the DecodeLabs ecosystem.
 
-_Get news and updates on the [DecodeLabs blog](https://blog.decodelabs.com)._
-
 ---
 
 ## Installation

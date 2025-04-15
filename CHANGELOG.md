@@ -1,3 +1,6 @@
+## v0.6.1 (2025-04-15)
+* Upgraded Greenleaf dependency
+
 ## v0.6.0 (2025-04-09)
 * Upgraded Genesis dependency
 * Refactored Bootstrap handling
