@@ -11,39 +11,27 @@ namespace DecodeLabs\Fabric\App;
 
 use DecodeLabs\Fabric\App;
 use DecodeLabs\Genesis\Loader\Stack as StackLoader;
+use DecodeLabs\Harvest\Profile as HarvestProfile;
 
 class Generic implements App
 {
     protected(set) ?string $namespace;
 
-    /**
-     * Init with app namespace
-     */
     public function __construct(
         ?string $namespace
     ) {
         $this->namespace = $namespace;
     }
 
-    /**
-     * Stub loader initializer
-     */
     public function initializeLoaders(StackLoader $stack): void
     {
     }
 
-    /**
-     * Stub platform initializer
-     */
     public function initializePlatform(): void
     {
     }
 
-
-    /**
-     * Get middleware list
-     */
-    public function prepareHttpMiddleware(): ?array
+    public function loadHttpProfile(): ?HarvestProfile
     {
         return null;
     }

@@ -32,6 +32,7 @@ use DecodeLabs\Genesis\Kernel;
 use DecodeLabs\Genesis\Loader\Stack as StackLoader;
 use DecodeLabs\Glitch;
 use DecodeLabs\Greenleaf;
+use DecodeLabs\Harvest;
 use DecodeLabs\Monarch;
 use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Veneer;
@@ -195,7 +196,13 @@ class Hub implements HubInterface
                 'app' => Monarch::$paths->root,
                 'vendor' => Monarch::$paths->root . '/vendor'
             ])
-            ->registerAsErrorHandler();
+            ->registerAsErrorHandler()
+            ->setHeaderBufferSender(function () {
+                // Send cookies when dumping
+                foreach(Harvest::$cookies->toStringArray() as $cookie) {
+                    header('Set-Cookie: ' . $cookie, false);
+                }
+            });
 
 
         // Namespaces
