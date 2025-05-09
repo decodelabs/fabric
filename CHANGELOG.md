@@ -1,3 +1,9 @@
+## v0.7.0 (2025-05-09)
+* Upgraded Harvest to v0.5.0
+* Upgraded Greenleaf to v0.8.0
+* Simplified Middleware initialisation
+* Implemented dump cookie handler
+
 ## v0.6.1 (2025-04-15)
 * Upgraded Greenleaf dependency
 

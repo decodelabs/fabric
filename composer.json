@@ -20,8 +20,8 @@
         "decodelabs/exceptional": "^0.5.3",
         "decodelabs/genesis": "^0.12.1",
         "decodelabs/glitch": "^0.19.4",
-        "decodelabs/greenleaf": "^0.7",
-        "decodelabs/harvest": "^0.4.5",
+        "decodelabs/greenleaf": "^0.8",
+        "decodelabs/harvest": "^0.5",
         "decodelabs/lucid": "^0.5.1",
         "decodelabs/monarch": "^0.1.1",
         "decodelabs/pandora": "^0.3",
@@ -31,6 +31,9 @@
     "require-dev": {
         "decodelabs/phpstan-decodelabs": "^0.7",
         "decodelabs/stash": "^0.6.1"
+    },
+    "conflict": {
+        "decodelabs/stash": "<0.6"
     },
     "autoload": {
         "psr-4": {
@@ -42,7 +45,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-develop": "0.6.x-dev"
+            "dev-develop": "0.7.x-dev"
         }
     },
     "config": {
