@@ -25,22 +25,23 @@ composer require decodelabs/fabric
 
 A Fabric app looks very similar to a standard package with most code residing in the src folder, under a namespace of your choice and loaded via composer.
 
-It does not require a custom entry point as it will automatically detect and load the app when the framework is initialised via the built in Bootstrap:
+### Bootstrapping
 
-```nginx
-# Example nginx config
-server {
-    listen          443 ssl;
-    server_name     my-app.localtest.me;
-    root            /var/www/my-app/;
+Choose a variant of `Genesis` Bootstrap to use for your app:
 
-    # Rewrite to fabric Bootstrap
-    rewrite         .* /vendor/decodelabs/fabric/src/Bootstrap.php last;
+```php
+// src/Bootstrap.php
 
-    include         snippets/php81.conf;
-    include         snippets/ssl.conf;
-}
+require_once dirname(__DIR__) . '/vendor/decodelabs/genesis/src/Bootstrap/Seamless.php';
+
+use DecodeLabs\Genesis\Bootstrap\Seamless;
+use DecodeLabs\Fabric\Genesis\Hub;
+
+new Seamless(
+    hubClass: Hub::class
+)->run();
 ```
+
 
 ### Config
 
