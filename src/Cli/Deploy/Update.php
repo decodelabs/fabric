@@ -9,31 +9,38 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Fabric\Cli\Deploy;
 
-use DecodeLabs\Clip\Task;
+use DecodeLabs\Clip;
+use DecodeLabs\Commandment\Action;
+use DecodeLabs\Commandment\Request;
 use DecodeLabs\Fabric;
-use DecodeLabs\Genesis;
 use DecodeLabs\Monarch;
 use DecodeLabs\Systemic;
-use DecodeLabs\Terminus as Cli;
+use DecodeLabs\Terminus\Session;
 
-class Update implements Task
+class Update implements Action
 {
-    public function execute(): bool
-    {
+    public function __construct(
+        protected Session $io
+    ) {
+    }
+
+    public function execute(
+        Request $request,
+    ): bool {
         Fabric::ensureCliSource();
 
         $this->updateGit();
         $this->updateComposer();
         $this->build();
 
-        Cli::newLine();
-        Cli::success('Done');
+        $this->io->newLine();
+        $this->io->success('Done');
         return true;
     }
 
     protected function updateGit(): void
     {
-        Cli::info('Updating git...');
+        $this->io->info('Updating git...');
 
         // Git pull
         Systemic::run(
@@ -41,13 +48,13 @@ class Update implements Task
             Monarch::$paths->root
         );
 
-        Cli::newLine();
-        Cli::newLine();
+        $this->io->newLine();
+        $this->io->newLine();
     }
 
     protected function updateComposer(): void
     {
-        Cli::info('Updating composer...');
+        $this->io->info('Updating composer...');
 
         $args = [];
 
@@ -60,15 +67,15 @@ class Update implements Task
             Monarch::$paths->root
         );
 
-        Cli::newLine();
-        Cli::newLine();
+        $this->io->newLine();
+        $this->io->newLine();
     }
 
     protected function build(): void
     {
-        Cli::info('Building...');
+        $this->io->info('Building...');
 
-        Fabric::getTaskController()->runTask('deploy/build', [
+        Clip::runAction('deploy/build', [
             '--fabric-source'
         ]);
     }

@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Fabric;
 
-use DecodeLabs\Clip\Controller as ClipController;
 use DecodeLabs\Fabric;
 use DecodeLabs\Genesis;
 use DecodeLabs\Monarch;
@@ -44,17 +43,6 @@ class Context
         }
     }
 
-    /**
-     * Get task controller
-     */
-    public function getTaskController(): ClipController
-    {
-        return $this->container->get(ClipController::class);
-    }
-
-    /**
-     * Ensure CLI is running in source mode
-     */
     public function ensureCliSource(): void
     {
         if (!Genesis::$build->compiled) {

@@ -11,7 +11,6 @@ use DecodeLabs\Fabric\Context as Inst;
 use DecodeLabs\Fabric\App as AppPlugin;
 use DecodeLabs\Pandora\Container as ContainerPlugin;
 use DecodeLabs\Veneer\Plugin\Wrapper as PluginWrapper;
-use DecodeLabs\Clip\Controller as Ref0;
 
 class Fabric implements Proxy
 {
@@ -25,8 +24,5 @@ class Fabric implements Proxy
     public static AppPlugin|PluginWrapper $app;
     public static ContainerPlugin $container;
 
-    public static function getTaskController(): Ref0 {
-        return static::$_veneerInstance->getTaskController();
-    }
     public static function ensureCliSource(): void {}
 };

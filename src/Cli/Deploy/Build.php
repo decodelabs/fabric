@@ -9,35 +9,51 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Fabric\Cli\Deploy;
 
-use DecodeLabs\Clip\Task;
+use DecodeLabs\Commandment\Action;
+use DecodeLabs\Commandment\Argument;
+use DecodeLabs\Commandment\Request;
 use DecodeLabs\Fabric;
 use DecodeLabs\Genesis;
-use DecodeLabs\Terminus as Cli;
+use DecodeLabs\Terminus\Session;
 
-class Build implements Task
+#[Argument\Flag(
+    name: 'force',
+    shortcut: 'f',
+    description: 'Force compilation'
+)]
+#[Argument\Flag(
+    name: 'dev',
+    shortcut: 'd',
+    description: 'Build without compilation'
+)]
+#[Argument\Flag(
+    name: 'clear',
+    shortcut: 'c',
+    description: 'Clear builds'
+)]
+class Build implements Action
 {
-    public function execute(): bool
-    {
+    public function __construct(
+        protected Session $io
+    ) {
+    }
+
+    public function execute(
+        Request $request,
+    ): bool {
         Fabric::ensureCliSource();
-
-        // Prepare arguments
-        Cli::$command
-            ->addArgument('-force|f', 'Force compilation')
-            ->addArgument('-dev|d', 'Build without compilation')
-            ->addArgument('-clear|c', 'Clear builds');
-
 
         // Setup controller
         $handler = Genesis::$build->handler;
 
-        if (Cli::$command['clear']) {
+        if ($request->parameters->getAsBool('clear')) {
             // Clear
             $handler->clear();
         } else {
             // Run
-            if (Cli::$command['dev']) {
+            if ($request->parameters->getAsBool('dev')) {
                 $handler->setCompile(false);
-            } elseif (Cli::$command['force']) {
+            } elseif ($request->parameters->getAsBool('force')) {
                 $handler->setCompile(true);
             }
 

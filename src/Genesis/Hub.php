@@ -10,11 +10,11 @@ declare(strict_types=1);
 namespace DecodeLabs\Fabric\Genesis;
 
 use DecodeLabs\Archetype;
-use DecodeLabs\Clip as ClipNamespace;
 use DecodeLabs\Clip\Controller as ClipController;
+use DecodeLabs\Clip\Controller\Commandment as CommandmentController;
 use DecodeLabs\Clip\Kernel as ClipKernel;
-use DecodeLabs\Clip\Task as ClipTask;
 use DecodeLabs\Coercion;
+use DecodeLabs\Commandment\Action as CommandmentAction;
 use DecodeLabs\Exceptional;
 use DecodeLabs\Fabric;
 use DecodeLabs\Fabric\App;
@@ -45,7 +45,7 @@ class Hub implements HubInterface
      * @var array<string,string>
      */
     protected const array ArchetypeAliases = [
-        ClipTask::class => 'Cli',
+        CommandmentAction::class => 'Cli',
         Greenleaf::class . '\\*' => 'Http'
     ];
 
@@ -213,14 +213,17 @@ class Hub implements HubInterface
             );
         }
 
-        // Clip
-        Fabric::$container->bindShared(
-            ClipController::class
-        );
-
-
         // App
         $this->app->initializePlatform();
+
+
+        // Controller
+        if (!Fabric::$container->has(ClipController::class)) {
+            Fabric::$container->bindShared(
+                ClipController::class,
+                CommandmentController::class
+            );
+        }
     }
 
     /**
