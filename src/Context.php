@@ -63,7 +63,7 @@ class Context
         $args[] = '--fabric-source';
 
         Systemic::runScript($args);
-        Genesis::$kernel->shutdown();
+        exit(0);
     }
 }
 

@@ -27,7 +27,7 @@ class Update implements Action
     public function execute(
         Request $request,
     ): bool {
-        Fabric::ensureCliSource();
+        //Fabric::ensureCliSource();
 
         $this->updateGit();
         $this->updateComposer();
