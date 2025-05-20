@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Fabric;
 
+use DecodeLabs\Clip;
 use DecodeLabs\Fabric;
 use DecodeLabs\Genesis;
 use DecodeLabs\Monarch;
@@ -45,12 +46,17 @@ class Context
 
     public function ensureCliSource(): void
     {
-        if (!Genesis::$build->compiled) {
+        if (
+            !Genesis::$build->compiled ||
+            Genesis::$kernel->mode !== 'Cli'
+        ) {
             return;
         }
 
-        Cli::notice('Switching to source mode');
-        Cli::newLine();
+        $io = Clip::getIoSession();
+
+        $io->notice('Switching to source mode');
+        $io->newLine();
 
         /** @var array<string> */
         $args = $_SERVER['argv'] ?? [];
