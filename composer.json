@@ -16,7 +16,7 @@
         "decodelabs/archetype": "^0.3.8",
         "decodelabs/clip": "^0.5",
         "decodelabs/coercion": "^0.3.2",
-        "decodelabs/commandment": "^0.1.1",
+        "decodelabs/commandment": "^0.2",
         "decodelabs/dovetail": "^0.2.10",
         "decodelabs/exceptional": "^0.5.3",
         "decodelabs/genesis": "^0.12.1",

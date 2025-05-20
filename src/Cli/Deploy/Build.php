@@ -46,14 +46,14 @@ class Build implements Action
         // Setup controller
         $handler = Genesis::$build->handler;
 
-        if ($request->parameters->getAsBool('clear')) {
+        if ($request->parameters->asBool('clear')) {
             // Clear
             $handler->clear();
         } else {
             // Run
-            if ($request->parameters->getAsBool('dev')) {
+            if ($request->parameters->asBool('dev')) {
                 $handler->setCompile(false);
-            } elseif ($request->parameters->getAsBool('force')) {
+            } elseif ($request->parameters->asBool('force')) {
                 $handler->setCompile(true);
             }
 
