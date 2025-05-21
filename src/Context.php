@@ -15,7 +15,6 @@ use DecodeLabs\Genesis;
 use DecodeLabs\Monarch;
 use DecodeLabs\Pandora\Container;
 use DecodeLabs\Systemic;
-use DecodeLabs\Terminus as Cli;
 use DecodeLabs\Veneer;
 use DecodeLabs\Veneer\Plugin;
 

@@ -34,8 +34,6 @@ use DecodeLabs\Glitch;
 use DecodeLabs\Greenleaf;
 use DecodeLabs\Harvest;
 use DecodeLabs\Monarch;
-use DecodeLabs\Terminus as Cli;
-use DecodeLabs\Veneer;
 
 class Hub implements HubInterface
 {
