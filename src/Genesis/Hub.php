@@ -189,11 +189,6 @@ class Hub implements HubInterface
     {
         // Setup Glitch
         Glitch::setStartTime($this->context->getStartTime())
-            ->setRunMode(Monarch::getEnvironmentMode()->value)
-            ->registerPathAliases([
-                'app' => Monarch::$paths->root,
-                'vendor' => Monarch::$paths->root . '/vendor'
-            ])
             ->registerAsErrorHandler()
             ->setHeaderBufferSender(function () {
                 // Send cookies when dumping

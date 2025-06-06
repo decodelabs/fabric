@@ -13,25 +13,25 @@
     "require": {
         "php": "^8.4",
 
-        "decodelabs/archetype": "^0.3.8",
-        "decodelabs/clip": "^0.5",
-        "decodelabs/coercion": "^0.3.2",
-        "decodelabs/commandment": "^0.2",
-        "decodelabs/dovetail": "^0.2.10",
-        "decodelabs/exceptional": "^0.5.3",
-        "decodelabs/genesis": "^0.12.1",
-        "decodelabs/glitch": "^0.19.4",
-        "decodelabs/greenleaf": "^0.8",
-        "decodelabs/harvest": "^0.5",
-        "decodelabs/lucid": "^0.5.1",
-        "decodelabs/monarch": "^0.1.1",
-        "decodelabs/pandora": "^0.3",
-        "decodelabs/systemic": "^0.11.16",
-        "decodelabs/veneer": "^0.12.6"
+        "decodelabs/archetype": "^0.3.10",
+        "decodelabs/clip": "^0.5.5",
+        "decodelabs/coercion": "^0.3.3",
+        "decodelabs/commandment": "^0.2.2",
+        "decodelabs/dovetail": "^0.2.14",
+        "decodelabs/exceptional": "^0.6.1",
+        "decodelabs/genesis": "^0.12.4",
+        "decodelabs/glitch": "^0.20",
+        "decodelabs/greenleaf": "^0.8.4",
+        "decodelabs/harvest": "^0.5.4",
+        "decodelabs/lucid": "^0.5.2",
+        "decodelabs/monarch": "^0.1.4",
+        "decodelabs/pandora": "^0.3.3",
+        "decodelabs/systemic": "^0.11.18",
+        "decodelabs/veneer": "^0.12.8"
     },
     "require-dev": {
         "decodelabs/phpstan-decodelabs": "^0.7",
-        "decodelabs/stash": "^0.6.1"
+        "decodelabs/stash": "^0.6.5"
     },
     "conflict": {
         "decodelabs/stash": "<0.6"
