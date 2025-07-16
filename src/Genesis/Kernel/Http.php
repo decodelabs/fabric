@@ -17,7 +17,6 @@ use DecodeLabs\Harvest\Dispatcher;
 use DecodeLabs\Harvest\Profile;
 use DecodeLabs\Harvest\Request;
 use DecodeLabs\Harvest\Request\Factory\Environment as RequestFactory;
-use Psr\Http\Server\MiddlewareInterface as PsrMiddleware;
 
 class Http implements Kernel
 {
@@ -65,7 +64,8 @@ class Http implements Kernel
         );
     }
 
-    public function shutdown(): never {
+    public function shutdown(): never
+    {
         exit;
     }
 }

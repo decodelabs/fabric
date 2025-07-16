@@ -28,11 +28,11 @@ class Context
     #[Plugin]
     public Container $container {
         get {
-            if(isset($this->container)) {
+            if (isset($this->container)) {
                 return $this->container;
             }
 
-            if(!Monarch::$container instanceof Container) {
+            if (!Monarch::$container instanceof Container) {
                 $this->container = new Container();
                 Monarch::replaceContainer($this->container);
             } else {

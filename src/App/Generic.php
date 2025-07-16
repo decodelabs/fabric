@@ -15,7 +15,7 @@ use DecodeLabs\Harvest\Profile as HarvestProfile;
 
 class Generic implements App
 {
-    protected(set) ?string $namespace;
+    public protected(set) ?string $namespace;
 
     public function __construct(
         ?string $namespace

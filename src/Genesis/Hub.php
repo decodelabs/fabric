@@ -134,7 +134,7 @@ class Hub implements HubInterface
         );
 
         // Config
-        if($this->analysisMode !== AnalysisMode::Self) {
+        if ($this->analysisMode !== AnalysisMode::Self) {
             $config = EnvironmentConfig::load();
             Monarch::setApplicationName($config->getAppName());
             Monarch::$paths->localData = Monarch::$paths->root . '/' . ltrim($config->getLocalDataPath(), '/');
@@ -192,7 +192,7 @@ class Hub implements HubInterface
             ->registerAsErrorHandler()
             ->setHeaderBufferSender(function () {
                 // Send cookies when dumping
-                foreach(Harvest::$cookies->toStringArray() as $cookie) {
+                foreach (Harvest::$cookies->toStringArray() as $cookie) {
                     header('Set-Cookie: ' . $cookie, false);
                 }
             });
