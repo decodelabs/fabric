@@ -17,6 +17,7 @@ use DecodeLabs\Harvest\Dispatcher;
 use DecodeLabs\Harvest\Profile;
 use DecodeLabs\Harvest\Request;
 use DecodeLabs\Harvest\Request\Factory\Environment as RequestFactory;
+use DecodeLabs\Harvest\ResponseHandler;
 
 class Http implements Kernel
 {
@@ -56,12 +57,9 @@ class Http implements Kernel
     public function run(): void
     {
         $response = $this->dispatcher->handle($this->request);
-        $transport = Harvest::createTransport();
 
-        $transport->sendResponse(
-            $this->request,
-            $response
-        );
+        $handler = new ResponseHandler();
+        $handler->sendResponse($this->request, $response);
     }
 
     public function shutdown(): never
