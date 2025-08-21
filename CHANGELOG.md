@@ -5,12 +5,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Unreleased
+--
+
+---
+
+### [v0.9.0](https://github.com/decodelabs/fabric/commits/v0.9.0) - 21st August 2025
+
 - Implemented Kingdom interface
 - Removed App interface
 - Removed Veneer Context
 - Removed appName from Environment config
 - Simplified Genesis Hub initialisation
 - Moved HTTP Kernel to Harvest as Kingdom Runtime
+
+[Full list of changes](https://github.com/decodelabs/fabric/compare/v0.8.8...v0.9.0)
 
 ---
 
