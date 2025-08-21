@@ -13,36 +13,33 @@
     "require": {
         "php": "^8.4",
 
-        "decodelabs/archetype": "^0.3.10",
-        "decodelabs/clip": "^0.5.5",
-        "decodelabs/coercion": "^0.3.3",
-        "decodelabs/commandment": "^0.2.2",
-        "decodelabs/dovetail": "^0.2.14",
-        "decodelabs/exceptional": "^0.6.1",
-        "decodelabs/genesis": "^0.12.4",
-        "decodelabs/glitch": "^0.20",
-        "decodelabs/greenleaf": "^0.9",
-        "decodelabs/harvest": "^0.6",
-        "decodelabs/lucid": "^0.5.2",
-        "decodelabs/monarch": "^0.1.4",
-        "decodelabs/pandora": "^0.3.3",
-        "decodelabs/systemic": "^0.11.18",
-        "decodelabs/veneer": "^0.12.8"
+        "decodelabs/archetype": "^0.4",
+        "decodelabs/clip": "^0.6",
+        "decodelabs/coercion": "^0.3.5",
+        "decodelabs/commandment": "^0.3",
+        "decodelabs/dovetail": "^0.3.1",
+        "decodelabs/exceptional": "^0.6.3",
+        "decodelabs/genesis": "^0.13",
+        "decodelabs/glitch": "^0.21",
+        "decodelabs/greenleaf": "^0.10",
+        "decodelabs/harvest": "^0.7",
+        "decodelabs/kingdom": "^0.1.1",
+        "decodelabs/lucid": "^0.6",
+        "decodelabs/monarch": "^0.2.1",
+        "decodelabs/pandora": "^0.4",
+        "decodelabs/systemic": "^0.12"
     },
     "require-dev": {
         "decodelabs/phpstan-decodelabs": "^0.7",
-        "decodelabs/stash": "^0.6.5"
+        "decodelabs/stash": "^0.7"
     },
     "conflict": {
-        "decodelabs/stash": "<0.6"
+        "decodelabs/stash": "<0.7"
     },
     "autoload": {
         "psr-4": {
             "DecodeLabs\\Fabric\\": "src/"
-        },
-        "files": [
-            "src/Context.php"
-        ]
+        }
     },
     "extra": {
         "branch-alias": {

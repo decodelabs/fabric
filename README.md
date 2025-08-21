@@ -51,19 +51,9 @@ The most important config file is the <code>Environment.php</code> file which de
 
 The _appNamespace_ value will allow you to define the namespace in which the majority of your app code will reside, and which is already defined for loading in your composer file.
 
-### App file
+### Kingdom
 
-The App file is the main entry point for your app and is where you can override default behaviour in key areas of your app. If one is not defined, a default will be used.
-
-While in early development, the interface for this class will change a lot, however default implementations will be provided in the Generic instance of the interface to ensure backwards compatibility.
-
-The App instance can be recalled using the Fabric Veneer frontage:
-
-```php
-use DecodeLabs\Fabric;
-
-$app = Fabric::getApp();
-```
+_Coming soon_
 
 ### Structure
 

@@ -12,7 +12,7 @@ namespace DecodeLabs\Fabric\Cli\Deploy;
 use DecodeLabs\Clip;
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Request;
-use DecodeLabs\Fabric;
+use DecodeLabs\Fabric\Kingdom as FabricKingdom;
 use DecodeLabs\Monarch;
 use DecodeLabs\Systemic;
 use DecodeLabs\Terminus\Session;
@@ -20,14 +20,16 @@ use DecodeLabs\Terminus\Session;
 class Update implements Action
 {
     public function __construct(
-        protected Session $io
+        protected Session $io,
+        protected Clip $clip,
+        protected Systemic $systemic
     ) {
     }
 
     public function execute(
         Request $request,
     ): bool {
-        Fabric::ensureCliSource();
+        FabricKingdom::ensureCliSource();
 
         $this->updateGit();
         $this->updateComposer();
@@ -43,9 +45,9 @@ class Update implements Action
         $this->io->info('Updating git...');
 
         // Git pull
-        Systemic::run(
+        $this->systemic->run(
             ['git', 'pull'],
-            Monarch::$paths->root
+            Monarch::getPaths()->root
         );
 
         $this->io->newLine();
@@ -62,9 +64,9 @@ class Update implements Action
             $args[] = '--no-dev';
         }
 
-        Systemic::run(
+        $this->systemic->run(
             ['composer', 'install', ...$args],
-            Monarch::$paths->root
+            Monarch::getPaths()->root
         );
 
         $this->io->newLine();
@@ -75,7 +77,7 @@ class Update implements Action
     {
         $this->io->info('Building...');
 
-        Clip::runAction('deploy/build', [
+        $this->clip->runAction('deploy/build', [
             '--fabric-source'
         ]);
     }

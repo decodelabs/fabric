@@ -10,30 +10,28 @@ declare(strict_types=1);
 namespace DecodeLabs\Fabric\Genesis;
 
 use DecodeLabs\Archetype;
-use DecodeLabs\Clip\Controller as ClipController;
-use DecodeLabs\Clip\Controller\Commandment as CommandmentController;
-use DecodeLabs\Clip\Kernel as ClipKernel;
 use DecodeLabs\Coercion;
 use DecodeLabs\Commandment\Action as CommandmentAction;
-use DecodeLabs\Exceptional;
+use DecodeLabs\Dovetail;
 use DecodeLabs\Fabric;
-use DecodeLabs\Fabric\App;
 use DecodeLabs\Fabric\Dovetail\Config\Environment as EnvironmentConfig;
 use DecodeLabs\Fabric\Genesis\Build\Manifest as BuildManifest;
 use DecodeLabs\Fluidity\CastTrait;
+use DecodeLabs\Genesis;
 use DecodeLabs\Genesis\Bootstrap;
 use DecodeLabs\Genesis\Bootstrap\Analysis as AnalysisBootstrap;
 use DecodeLabs\Genesis\Build;
 use DecodeLabs\Genesis\Build\Manifest as BuildManifestInterface;
-use DecodeLabs\Genesis\Context;
 use DecodeLabs\Genesis\Environment\Config as EnvConfig;
 use DecodeLabs\Genesis\Hub as HubInterface;
-use DecodeLabs\Genesis\Kernel;
-use DecodeLabs\Genesis\Loader\Stack as StackLoader;
 use DecodeLabs\Glitch;
 use DecodeLabs\Greenleaf;
 use DecodeLabs\Harvest;
+use DecodeLabs\Kingdom;
 use DecodeLabs\Monarch;
+use DecodeLabs\Pandora\Container;
+use DecodeLabs\Veneer;
+use ReflectionClass;
 
 class Hub implements HubInterface
 {
@@ -50,22 +48,32 @@ class Hub implements HubInterface
     protected ?string $envId = null;
 
     public ?BuildManifestInterface $buildManifest {
-        get => new BuildManifest();
+        get => new BuildManifest($this->archetype);
     }
 
     protected ?AnalysisMode $analysisMode = null;
-    protected App $app;
-    protected Context $context;
+    protected ?string $appNamespace = null;
+    protected Container $container;
+    protected Archetype $archetype;
+    protected Genesis $genesis;
 
     public function __construct(
-        Context $context,
+        Genesis $genesis,
         Bootstrap $bootstrap
     ) {
-        $this->context = $context;
+        $this->genesis = $genesis;
 
         if ($bootstrap instanceof AnalysisBootstrap) {
             $this->prepareForAnalysis($bootstrap);
         }
+
+        $this->container = new Container();
+
+        if (class_exists(Veneer::class)) {
+            Veneer::setContainer($this->container);
+        }
+
+        $this->archetype = $this->container->get(Archetype::class);
     }
 
     protected function prepareForAnalysis(
@@ -73,7 +81,7 @@ class Hub implements HubInterface
     ): void {
         $appDir = $bootstrap->rootPath;
         $hasAppFile =
-            file_exists($appDir . '/src/App.php') &&
+            file_exists($appDir . '/src/Bootstrap.php') &&
             !file_exists($appDir . '/src/Context.php');
 
         if ($hasAppFile) {
@@ -83,12 +91,9 @@ class Hub implements HubInterface
             $appDir = dirname(dirname(__DIR__)) . '/tests';
         }
 
-        Monarch::$paths->root = $appDir;
+        Monarch::getPaths()->root = $appDir;
     }
 
-    /**
-     * Load build info
-     */
     public function loadBuild(): Build
     {
         // Ensure compile constants
@@ -109,157 +114,113 @@ class Hub implements HubInterface
         } elseif ($this->analysisMode === AnalysisMode::Self) {
             $buildPath = (string)getcwd();
         } else {
-            $buildPath = Monarch::$paths->root;
+            $buildPath = Monarch::getPaths()->root;
         }
 
         // Create build info
         return new Build(
-            $this->context,
+            $this->genesis,
             $buildPath,
             Coercion::tryInt(Fabric\BUILD_TIMESTAMP)
         );
     }
 
-    /**
-     * Setup loaders
-     */
-    public function initializeLoaders(
-        StackLoader $stack
-    ): void {
+    public function initializeLoaders(): void
+    {
         // Archetype
-        Archetype::map(
-            'DecodeLabs',
-            Fabric::class,
-            1
+        $this->archetype->map(
+            root: 'DecodeLabs',
+            // @phpstan-ignore-next-line
+            namespace: Fabric::class,
+            priority: 1
         );
 
         // Config
         if ($this->analysisMode !== AnalysisMode::Self) {
-            $config = EnvironmentConfig::load();
-            Monarch::setApplicationName($config->getAppName());
-            Monarch::$paths->localData = Monarch::$paths->root . '/' . ltrim($config->getLocalDataPath(), '/');
-            Monarch::$paths->sharedData = Monarch::$paths->root . '/' . ltrim($config->getSharedDataPath(), '/');
+            $config = $this->container->get(EnvironmentConfig::class);
+            $paths = Monarch::getPaths();
+
+            $paths->localData = $paths->root . '/' . ltrim($config->getLocalDataPath(), '/');
+            $paths->sharedData = $paths->root . '/' . ltrim($config->getSharedDataPath(), '/');
 
             // App
-            $namespace = $config->getAppNamespace();
+            $this->appNamespace = $config->getAppNamespace();
 
-            if ($namespace !== null) {
-                Archetype::map('DecodeLabs', $namespace, 10);
-                Archetype::alias(Fabric::class, $namespace, 11);
-                Archetype::alias(App::class, $namespace);
+            if ($this->appNamespace !== null) {
+                $this->archetype->map(
+                    root: 'DecodeLabs',
+                    namespace: $this->appNamespace,
+                    priority: 10
+                );
+
+                $this->archetype->alias(
+                    // @phpstan-ignore-next-line
+                    interface: Fabric::class,
+                    alias: $this->appNamespace,
+                    priority: 11
+                );
             }
         } else {
-            $namespace = null;
+            $this->appNamespace = null;
         }
 
-        $this->app = Fabric::$container->getWith(App::class, [
-            'namespace' => $namespace
-        ]);
-
-        $this->app->initializeLoaders($stack);
+        // Namespaces
+        foreach (static::ArchetypeAliases as $interface => $classExt) {
+            $this->archetype->alias(
+                interface: $interface,
+                // @phpstan-ignore-next-line
+                alias: Fabric::class . '\\' . $classExt
+            );
+        }
     }
 
-    /**
-     * Load env config
-     */
     public function loadEnvironmentConfig(): EnvConfig
     {
         if ($this->analysisMode) {
             return new EnvConfig\Development('analysis');
         }
 
+        $ref = new ReflectionClass(EnvironmentConfig::class);
+
+        $config = $ref->newLazyProxy(function () {
+            $dovetail = $this->container->get(Dovetail::class);
+            return $dovetail->load(EnvironmentConfig::class);
+        });
+
         /** @phpstan-ignore-next-line */
-        $name = ucfirst(Fabric\BUILD_ENV_MODE ?? EnvironmentConfig::load()->getMode());
+        $name = ucfirst(Fabric\BUILD_ENV_MODE ?? $config->getMode());
 
         /** @var class-string<EnvConfig\Development|EnvConfig\Testing|EnvConfig\Production> */
         $class = EnvConfig::class . '\\' . $name;
 
         $output = new $class(
-            $this->envId ?? EnvironmentConfig::load()->getName()
+            $this->envId ?? $config->getName()
         );
 
         $output->umask = 0;
         return $output;
     }
 
-    /**
-     * Initialize platform
-     */
     public function initializePlatform(): void
     {
-        // Setup Glitch
-        Glitch::setStartTime($this->context->getStartTime())
-            ->registerAsErrorHandler()
-            ->setHeaderBufferSender(function () {
-                // Send cookies when dumping
-                foreach (Harvest::$cookies->toStringArray() as $cookie) {
-                    header('Set-Cookie: ' . $cookie, false);
-                }
-            });
+        // Glitch
+        $glitch = $this->container->get(Glitch::class);
+        $glitch->setStartTime(Monarch::getStartTime());
+        $glitch->registerAsErrorHandler();
 
+        $glitch->setHeaderBufferSender(function () {
+            $harvest = $this->container->get(Harvest::class);
 
-        // Namespaces
-        foreach (static::ArchetypeAliases as $interface => $classExt) {
-            Archetype::alias(
-                $interface,
-                Fabric::class . '\\' . $classExt
-            );
-        }
-
-        // App
-        $this->app->initializePlatform();
-
-
-        // Controller
-        if (!Fabric::$container->has(ClipController::class)) {
-            Fabric::$container->bindShared(
-                ClipController::class,
-                CommandmentController::class
-            );
-        }
+            // Send cookies when dumping
+            foreach ($harvest->cookies->toStringArray() as $cookie) {
+                header('Set-Cookie: ' . $cookie, false);
+            }
+        });
     }
 
-    /**
-     * Load kernel
-     */
-    public function loadKernel(): Kernel
+    public function loadKingdom(): Kingdom
     {
-        $kernel = $this->detectKernel();
-
-        if ($kernel === 'Cli') {
-            $kernel = ['Cli', ClipKernel::class];
-        }
-
-        $class = Archetype::resolve(Kernel::class, $kernel);
-        return new $class($this->context);
-    }
-
-    protected function detectKernel(): string
-    {
-        if (isset($_SERVER['HTTP_HOST'])) {
-            return 'Http';
-        } elseif (isset($_SERVER['argv'])) {
-            return 'Cli';
-        }
-
-        switch (\PHP_SAPI) {
-            case 'cli':
-            case 'phpdbg':
-                return 'Cli';
-
-            case 'apache':
-            case 'apache2filter':
-            case 'apache2handler':
-            case 'fpm-fcgi':
-            case 'cgi-fcgi':
-            case 'phttpd':
-            case 'pi3web':
-            case 'thttpd':
-                return 'Http';
-        }
-
-        throw Exceptional::UnexpectedValue(
-            message: 'Unable to detect run mode (' . \PHP_SAPI . ')'
-        );
+        $class = $this->archetype->resolve(Kingdom::class);
+        return new $class($this->container);
     }
 }

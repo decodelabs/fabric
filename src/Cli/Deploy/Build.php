@@ -12,7 +12,7 @@ namespace DecodeLabs\Fabric\Cli\Deploy;
 use DecodeLabs\Commandment\Action;
 use DecodeLabs\Commandment\Argument;
 use DecodeLabs\Commandment\Request;
-use DecodeLabs\Fabric;
+use DecodeLabs\Fabric\Kingdom as FabricKingdom;
 use DecodeLabs\Genesis;
 use DecodeLabs\Terminus\Session;
 
@@ -34,17 +34,18 @@ use DecodeLabs\Terminus\Session;
 class Build implements Action
 {
     public function __construct(
-        protected Session $io
+        protected Session $io,
+        protected Genesis $genesis
     ) {
     }
 
     public function execute(
         Request $request,
     ): bool {
-        Fabric::ensureCliSource();
+        FabricKingdom::ensureCliSource();
 
         // Setup controller
-        $handler = Genesis::$build->handler;
+        $handler = $this->genesis->buildHandler;
 
         if ($request->parameters->asBool('clear')) {
             // Clear

@@ -28,7 +28,7 @@ class Manifest implements ManifestInterface
             'const BUILD_TIMESTAMP = ' . time() . ';' . "\n" .
             'const BUILD_ID = \'' . $buildId . '\';' . "\n" .
             'const BUILD_ROOT_PATH = __DIR__;' . "\n" .
-            'const BUILD_ENV_MODE = \'' . Monarch::getEnvironmentMode()->value . '\';'
+            'const BUILD_ENV_MODE = \'' . Monarch::getEnvironment()->mode->value . '\';'
         );
     }
 }

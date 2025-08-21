@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace DecodeLabs\Fabric\Dovetail\Config;
 
+use DecodeLabs\Coercion;
 use DecodeLabs\Dovetail\Config;
 use DecodeLabs\Dovetail\ConfigTrait;
 
@@ -22,10 +23,9 @@ class Environment implements Config
     public static function getDefaultValues(): array
     {
         return [
-            'mode' => "{{envString('ENV_MODE', 'production')}:development}",
-            'name' => "{{envString('ENV_NAME')}}",
+            'mode' => "{{Env::asString('ENV_MODE', 'production')}}",
+            'name' => "{{Env::asString('ENV_NAME', 'production')}}",
             'appNamespace' => '{{Vendor\\AppName::class}}',
-            'appName' => 'Fabric',
             'localDataPath' => 'data/local',
             'sharedDataPath' => 'data/shared'
         ];
@@ -37,9 +37,7 @@ class Environment implements Config
      */
     public function getMode(): string
     {
-        return $this->data->mode->as('string', [
-            'default' => 'testing'
-        ]);
+        return Coercion::tryString($this->data['mode']) ?? 'testing';
     }
 
     /**
@@ -47,17 +45,7 @@ class Environment implements Config
      */
     public function getName(): ?string
     {
-        return $this->data->name->as('?string');
-    }
-
-    /**
-     * Get application name
-     */
-    public function getAppName(): string
-    {
-        return $this->data->appName->as('string', [
-            'default' => 'Fabric'
-        ]);
+        return Coercion::tryString($this->data['name']);
     }
 
     /**
@@ -66,7 +54,7 @@ class Environment implements Config
     public function getAppNamespace(): ?string
     {
         if (
-            null === ($output = $this->data->appNamespace->as('?string')) ||
+            null === ($output = Coercion::tryString($this->data['appNamespace'])) ||
             $output === '\\'
         ) {
             return null;
@@ -81,9 +69,7 @@ class Environment implements Config
      */
     public function getLocalDataPath(): string
     {
-        return $this->data->localDataPath->as('string', [
-            'default' => 'data/local'
-        ]);
+        return Coercion::tryString($this->data['localDataPath']) ?? 'data/local';
     }
 
     /**
@@ -91,8 +77,6 @@ class Environment implements Config
      */
     public function getSharedDataPath(): string
     {
-        return $this->data->sharedDataPath->as('string', [
-            'default' => 'data/shared'
-        ]);
+        return Coercion::tryString($this->data['sharedDataPath']) ?? 'data/shared';
     }
 }
