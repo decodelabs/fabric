@@ -17,9 +17,6 @@ class Environment implements Config
 {
     use ConfigTrait;
 
-    /**
-     * Get default config values
-     */
     public static function getDefaultValues(): array
     {
         return [
@@ -32,25 +29,16 @@ class Environment implements Config
     }
 
 
-    /**
-     * Get run mode
-     */
     public function getMode(): string
     {
         return Coercion::tryString($this->data['mode']) ?? 'testing';
     }
 
-    /**
-     * Get environment name
-     */
     public function getName(): ?string
     {
         return Coercion::tryString($this->data['name']);
     }
 
-    /**
-     * Get application namespace
-     */
     public function getAppNamespace(): ?string
     {
         if (
@@ -63,18 +51,11 @@ class Environment implements Config
         return rtrim($output, '\\');
     }
 
-
-    /**
-     * Get local data path
-     */
     public function getLocalDataPath(): string
     {
         return Coercion::tryString($this->data['localDataPath']) ?? 'data/local';
     }
 
-    /**
-     * Get shared data path
-     */
     public function getSharedDataPath(): string
     {
         return Coercion::tryString($this->data['sharedDataPath']) ?? 'data/shared';
