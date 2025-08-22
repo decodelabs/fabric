@@ -17,9 +17,6 @@ use DecodeLabs\Kingdom\Runtime\Clip as CliRuntime;
 use DecodeLabs\Kingdom\Runtime\Harvest as HttpRuntime;
 use DecodeLabs\Kingdom\RuntimeMode;
 use DecodeLabs\KingdomTrait;
-use DecodeLabs\Monarch;
-use DecodeLabs\Systemic;
-use DecodeLabs\Terminus\Session;
 
 class Kingdom implements KingdomInterface
 {
@@ -50,31 +47,5 @@ class Kingdom implements KingdomInterface
                 }
             );
         }
-    }
-
-    public static function ensureCliSource(): void
-    {
-        $kingdom = Monarch::getKingdom();
-        $mode = $kingdom->runtime->mode;
-
-        if (
-            !Monarch::getBuild()->compiled ||
-            $mode !== RuntimeMode::Cli
-        ) {
-            return;
-        }
-
-        $io = Session::getDefault();
-
-        $io->notice('Switching to source mode');
-        $io->newLine();
-
-        /** @var array<string> */
-        $args = $_SERVER['argv'] ?? [];
-        $args[] = '--fabric-source';
-
-        $systemic = $kingdom->getService(Systemic::class);
-        $systemic->runScript($args);
-        exit(0);
     }
 }
