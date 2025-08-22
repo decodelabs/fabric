@@ -270,7 +270,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### [v0.3.6](https://github.com/decodelabs/fabric/commits/v0.3.6) - 8th May 2024
 
 - Added ensureCliSource helper
-- Added environement name option to config
+- Added environment name option to config
 
 [Full list of changes](https://github.com/decodelabs/fabric/compare/v0.3.5...v0.3.6)
 
