@@ -19,7 +19,7 @@
         "decodelabs/commandment": "^0.3",
         "decodelabs/dovetail": "^0.3.1",
         "decodelabs/exceptional": "^0.6.3",
-        "decodelabs/genesis": "^0.13",
+        "decodelabs/genesis": "^0.14",
         "decodelabs/glitch": "^0.21",
         "decodelabs/greenleaf": "^0.10",
         "decodelabs/harvest": "^0.7",
@@ -42,13 +42,17 @@
         }
     },
     "extra": {
+        "genesis": {
+            "hub": "DecodeLabs\\Fabric\\Genesis\\Hub"
+        },
         "branch-alias": {
             "dev-develop": "0.9.x-dev"
         }
     },
     "config": {
         "allow-plugins": {
-            "phpstan/extension-installer": true
+            "phpstan/extension-installer": true,
+            "decodelabs/genesis": true
         }
     }
 }

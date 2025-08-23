@@ -16,12 +16,12 @@ use DecodeLabs\Dovetail;
 use DecodeLabs\Fabric;
 use DecodeLabs\Fabric\Dovetail\Config\Environment as EnvironmentConfig;
 use DecodeLabs\Fabric\Genesis\Build\Manifest as BuildManifest;
-use DecodeLabs\Fluidity\CastTrait;
 use DecodeLabs\Genesis;
-use DecodeLabs\Genesis\Bootstrap;
-use DecodeLabs\Genesis\Bootstrap\Analysis as AnalysisBootstrap;
+use DecodeLabs\Genesis\AnalysisMode;
 use DecodeLabs\Genesis\Build;
 use DecodeLabs\Genesis\Build\Manifest as BuildManifestInterface;
+use DecodeLabs\Genesis\Build\Strategy;
+use DecodeLabs\Genesis\Build\Strategy\Seamless;
 use DecodeLabs\Genesis\Environment\Config as EnvConfig;
 use DecodeLabs\Genesis\Hub as HubInterface;
 use DecodeLabs\Glitch;
@@ -35,8 +35,6 @@ use ReflectionClass;
 
 class Hub implements HubInterface
 {
-    use CastTrait;
-
     /**
      * @var array<string,string>
      */
@@ -48,25 +46,24 @@ class Hub implements HubInterface
     protected ?string $envId = null;
 
     public ?BuildManifestInterface $buildManifest {
-        get => new BuildManifest($this->archetype);
+        get => new BuildManifest(
+            $this->buildStrategy,
+            $this->archetype
+        );
     }
 
-    protected ?AnalysisMode $analysisMode = null;
+    protected Strategy $buildStrategy {
+        get => new Seamless();
+    }
+
     protected ?string $appNamespace = null;
     protected Container $container;
     protected Archetype $archetype;
-    protected Genesis $genesis;
 
     public function __construct(
-        Genesis $genesis,
-        Bootstrap $bootstrap
+        protected Genesis $genesis,
+        protected ?AnalysisMode $analysisMode = null
     ) {
-        $this->genesis = $genesis;
-
-        if ($bootstrap instanceof AnalysisBootstrap) {
-            $this->prepareForAnalysis($bootstrap);
-        }
-
         $this->container = new Container();
 
         if (class_exists(Veneer::class)) {
@@ -74,24 +71,6 @@ class Hub implements HubInterface
         }
 
         $this->archetype = $this->container->get(Archetype::class);
-    }
-
-    protected function prepareForAnalysis(
-        AnalysisBootstrap $bootstrap
-    ): void {
-        $appDir = $bootstrap->rootPath;
-        $hasAppFile =
-            file_exists($appDir . '/src/Bootstrap.php') &&
-            !file_exists($appDir . '/src/Context.php');
-
-        if ($hasAppFile) {
-            $this->analysisMode = AnalysisMode::App;
-        } else {
-            $this->analysisMode = AnalysisMode::Self;
-            $appDir = dirname(dirname(__DIR__)) . '/tests';
-        }
-
-        Monarch::getPaths()->root = $appDir;
     }
 
     public function loadBuild(): Build
@@ -111,7 +90,7 @@ class Hub implements HubInterface
             is_dir($path = Coercion::asString(Fabric\BUILD_ROOT_PATH))
         ) {
             $buildPath = $path;
-        } elseif ($this->analysisMode === AnalysisMode::Self) {
+        } elseif ($this->analysisMode === AnalysisMode::Library) {
             $buildPath = (string)getcwd();
         } else {
             $buildPath = Monarch::getPaths()->root;
@@ -136,7 +115,7 @@ class Hub implements HubInterface
         );
 
         // Config
-        if ($this->analysisMode !== AnalysisMode::Self) {
+        if ($this->analysisMode !== AnalysisMode::Library) {
             $config = $this->container->get(EnvironmentConfig::class);
             $paths = Monarch::getPaths();
 
@@ -160,8 +139,6 @@ class Hub implements HubInterface
                     priority: 11
                 );
             }
-        } else {
-            $this->appNamespace = null;
         }
 
         // Namespaces
