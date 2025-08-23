@@ -46,7 +46,7 @@
             "hub": "DecodeLabs\\Fabric\\Genesis\\Hub"
         },
         "branch-alias": {
-            "dev-develop": "0.9.x-dev"
+            "dev-develop": "0.10.x-dev"
         }
     },
     "config": {
