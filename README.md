@@ -27,21 +27,19 @@ A Fabric app looks very similar to a standard package with most code residing in
 
 ### Bootstrapping
 
-Choose a variant of `Genesis` Bootstrap to use for your app:
+Fabric uses `Genesis` for bootstrapping your application. Add the `DecodeLabs\Fabric\Genesis\Hub` class to your `composer.json` file:
 
-```php
-// src/Bootstrap.php
-
-require_once dirname(__DIR__) . '/vendor/decodelabs/genesis/src/Bootstrap/Seamless.php';
-
-use DecodeLabs\Genesis\Bootstrap\Seamless;
-use DecodeLabs\Fabric\Genesis\Hub;
-
-new Seamless(
-    hubClass: Hub::class
-)->run();
+```json
+{
+    "extra": {
+        "genesis": {
+            "hub": "DecodeLabs\\Fabric\\Genesis\\Hub"
+        }
+    }
+}
 ```
 
+Then point your HTTP server to rewite to `vendor/genesis.php` as your entry point. Genesis takes care of the rest.
 
 ### Config
 
