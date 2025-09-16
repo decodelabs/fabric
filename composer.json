@@ -31,10 +31,10 @@
     },
     "require-dev": {
         "decodelabs/phpstan-decodelabs": "^0.7",
-        "decodelabs/stash": "^0.7"
+        "decodelabs/stash": "^0.8"
     },
     "conflict": {
-        "decodelabs/stash": "<0.7"
+        "decodelabs/stash": "<0.8"
     },
     "autoload": {
         "psr-4": {
