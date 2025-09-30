@@ -15,6 +15,8 @@ Fabric provides the structures, prerequisites and conventions for building a web
 
 ## Installation
 
+This package requires PHP 8.4 or higher.
+
 Install via Composer:
 
 ```bash
