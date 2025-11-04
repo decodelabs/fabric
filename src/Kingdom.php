@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @package Fabric
- * @license http://opensource.org/licenses/MIT
+ * Fabric
+ * @license https://opensource.org/licenses/MIT
  */
 
 declare(strict_types=1);
